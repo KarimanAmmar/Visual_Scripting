@@ -390,6 +390,7 @@ class AllNodeFunctions(Serializable):
 
     def eval(self, index=0):
         """Evaluate this `Node`. This is supposed to be overridden. See :ref:`evaluation` for more"""
+
         self.markDirty(False)
         self.markInvalid(False)
         return 0
