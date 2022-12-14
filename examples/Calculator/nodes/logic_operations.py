@@ -39,20 +39,20 @@ class CalcNode_Less(CalcNode):
             return self.resultF
 
 
-@register_node(OP_NODE_EQUAL)
-class CalcNode_Equal(CalcNode):
-    icon = "icons/equal.png"
-    op_code = OP_NODE_EQUAL
-    op_title = "Equal"
-    content_label = "="
-
-    # content_label_objname = "calc_node_gt"
-
-    def evalOperation(self, input1, input2):
-        self.resultT = 'True'
-        self.resultF = 'False'
-
-        if input1 == input2:
-            return self.resultT
-        else:
-            return self.resultF
+# @register_node(OP_NODE_EQUAL)
+# class CalcNode_Equal(CalcNode):
+#     icon = "icons/equal.png"
+#     op_code = OP_NODE_EQUAL
+#     op_title = "Equal"
+#     content_label = "="
+#
+#     # content_label_objname = "calc_node_gt"
+#
+#     def evalOperation(self, input1, input2):
+#         self.resultT = 'True'
+#         self.resultF = 'False'
+#
+#         if input1 == input2:
+#             return self.resultT
+#         else:
+#             return self.resultF

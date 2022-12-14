@@ -11,6 +11,11 @@ SOCKET_COLORS = [
     QColor("#0000FF"),
     QColor("#00FF00"),
     QColor("#F87217"),
+    QColor("#89cff0"),
+    QColor("#FFFFFF"),
+    QColor("#0000FF"),
+    QColor("#00FF00"),
+    QColor("#F87217"),
     QColor("#89cff0")
 ]
 
