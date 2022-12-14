@@ -2,6 +2,8 @@
 """
 A module containing the Graphics representation of an Edge
 """
+import math
+
 from qtpy.QtWidgets import QGraphicsPathItem, QWidget, QGraphicsItem
 from qtpy.QtGui import QColor, QPen, QPainterPath
 from qtpy.QtCore import Qt, QRectF, QPointF
@@ -205,4 +207,3 @@ class DrawGraphicalEdge(QGraphicsPathItem):
         :rtype: ``QPainterPath``
         """
         return self.pathCalculator.calcPath()
-

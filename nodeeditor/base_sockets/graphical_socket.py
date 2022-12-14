@@ -7,20 +7,11 @@ from qtpy.QtGui import QColor, QBrush, QPen
 from qtpy.QtCore import Qt, QRectF
 
 SOCKET_COLORS = [
-    QColor("#FFFF7700"),
-    QColor("#FF52e220"),
-    QColor("#FF0056a6"),
-    QColor("#FFa86db1"),
-    QColor("#FFb54747"),
-    QColor("#FFdbe220"),
-    QColor("#FF888888"),
-    QColor("#FFFF7700"),
-    QColor("#FF52e220"),
-    QColor("#FF0056a6"),
-    QColor("#FFa86db1"),
-    QColor("#FFb54747"),
-    QColor("#FFdbe220"),
-    QColor("#FF888888"),
+    QColor("#FFFFFF"),
+    QColor("#0000FF"),
+    QColor("#00FF00"),
+    QColor("#F87217"),
+    QColor("#89cff0")
 ]
 
 class DrawGraphicalSocket(QGraphicsItem):

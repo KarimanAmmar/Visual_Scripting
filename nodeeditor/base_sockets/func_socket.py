@@ -74,10 +74,10 @@ class AllSocketFunctions(Serializable):
 
         self.edges = []
 
-    def __str__(self):
-        return "<Socket #%d %s %s..%s>" % (
-            self.index, "ME" if self.is_multi_edges else "SE", hex(id(self))[2:5], hex(id(self))[-3:]
-        )
+    # def __str__(self):
+    #     return "<Socket #%d %s %s..%s>" % (
+    #         self.index, "ME" if self.is_multi_edges else "SE", hex(id(self))[2:5], hex(id(self))[-3:]
+    #     )
 
     def delete(self):
         """Delete this `Socket` from graphics scene for sure"""

@@ -21,6 +21,7 @@ class CalcGraphicsNode(DrawGraphicalNode):
 
     def drawingAssets(self):
         super().drawingAssets()
+
         self.icons = QImage("icons/status_icons.png")
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
@@ -53,7 +54,7 @@ class CalcNode(AllNodeFunctions):
     GraphicsNode_class = CalcGraphicsNode
     NodeContent_class = CalcContent
 
-    def __init__(self, scene, inputs=[2,2], outputs=[1]):
+    def __init__(self, scene, inputs=[4,4], outputs=[4]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
 
         self.value = None
@@ -94,7 +95,7 @@ class CalcNode(AllNodeFunctions):
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid():
-            print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
+            # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
             return self.value
 
         try:
@@ -113,7 +114,7 @@ class CalcNode(AllNodeFunctions):
 
 
     def onInputChanged(self, socket=None):
-        print("%s::__onInputChanged" % self.__class__.__name__)
+        # print("%s::__onInputChanged" % self.__class__.__name__)
         self.markDirty()
         self.eval()
 
@@ -125,5 +126,5 @@ class CalcNode(AllNodeFunctions):
 
     def deserialize(self, data, hashmap={}, restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)
-        print("Deserialized CalcNode '%s'" % self.__class__.__name__, "res:", res)
+        # print("Deserialized CalcNode '%s'" % self.__class__.__name__, "res:", res)
         return res

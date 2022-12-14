@@ -6,7 +6,7 @@ from examples.Calculator.calc_conf import CALC_NODES, get_class_from_opcode, LIS
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 
-class QDMDragListbox(QListWidget):
+class GraphicalDragListBox(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.initUI()
