@@ -21,6 +21,7 @@ class CalcGraphicsNode(DrawGraphicalNode):
 
     def drawingAssets(self):
         super().drawingAssets()
+
         self.icons = QImage("icons/status_icons.png")
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
@@ -53,7 +54,7 @@ class CalcNode(AllNodeFunctions):
     GraphicsNode_class = CalcGraphicsNode
     NodeContent_class = CalcContent
 
-    def __init__(self, scene, inputs=[2,2], outputs=[1]):
+    def __init__(self, scene, inputs=[4,4], outputs=[4]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
 
         self.value = None

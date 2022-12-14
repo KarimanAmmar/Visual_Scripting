@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QColor, QFont, QPen, QBrush
 from qtpy.QtWidgets import QLineEdit
 from qtpy.QtCore import Qt
 from examples.Calculator.calc_conf import register_node, OP_NODE_INPUT
@@ -38,6 +39,8 @@ class CalcNode_Input(CalcNode):
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[3])
         self.eval()
+
+
 
     def getInnerClasses(self):
         self.content = CalcInputContent(self)

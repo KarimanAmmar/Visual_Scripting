@@ -48,9 +48,9 @@ class DrawGraphicalScene(QGraphicsScene):
 
     def drawingAssets(self):
         """Initialize ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""
-        self._color_background = QColor("#393939")
-        self._color_light = QColor("#2f2f2f")
-        self._color_dark = QColor("#292929")
+        self._color_background = QColor("#283448")
+        self._color_light = QColor("#2f4155")
+        self._color_dark = QColor("#2f4155")
         self._color_state = QColor("#ccc")
 
         self.setBackgroundBrush(self._color_background)

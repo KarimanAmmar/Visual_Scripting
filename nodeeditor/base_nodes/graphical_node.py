@@ -81,9 +81,9 @@ class DrawGraphicalNode(QGraphicsItem):
         self._title_color = Qt.white
         self._title_font = QFont("Ubuntu", 10)
 
-        self._color = QColor("#7F000000")
-        self._color_selected = QColor("#FFFFA637")
-        self._color_hovered = QColor("#FF37A6FF")
+        self._color = QColor("#ef974d")
+        self._color_selected = QColor("#F87217")
+        self._color_hovered = QColor("#F87217")
 
         self._pen_default = QPen(self._color)
         self._pen_default.setWidthF(2.0)
@@ -92,8 +92,8 @@ class DrawGraphicalNode(QGraphicsItem):
         self._pen_hovered = QPen(self._color_hovered)
         self._pen_hovered.setWidthF(3.0)
 
-        self._brush_title = QBrush(QColor("#FF313131"))
-        self._brush_background = QBrush(QColor("#E3212121"))
+        self._brush_title = QBrush(QColor("#131922"))
+        self._brush_background = QBrush(QColor("#1A202C"))
 
     def onSelected(self):
         """Our event handling when the node was selected"""
