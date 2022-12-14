@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import QComboBox, QWidgetAction
 from qtpy.QtGui import QIcon, QPixmap
 from qtpy.QtCore import QDataStream, QIODevice, Qt
 from qtpy.QtWidgets import QAction, QGraphicsProxyWidget, QMenu
@@ -62,8 +63,17 @@ class CalculatorSubWindow(NodeEditorWidget):
         context_menu = QMenu(self)
         keys = list(CALC_NODES.keys())
         keys.sort()
-        for key in keys: context_menu.addAction(self.node_actions[key])
+        for key in keys[0:2]: context_menu.addAction(self.node_actions[key])
+        calc = QMenu(context_menu)
+        calc.setTitle('Calculations')
+        context_menu.addMenu(calc)
+        for key in keys[2:6]: calc.addAction(self.node_actions[key])
+        logic = QMenu(context_menu)
+        logic.setTitle('Logic Operations')
+        context_menu.addMenu(logic)
+        for key in keys[6:8]: logic.addAction(self.node_actions[key])
         return context_menu
+
 
     def setTitle(self):
         self.setWindowTitle(self.getUserFilenames())
@@ -157,14 +167,13 @@ class CalculatorSubWindow(NodeEditorWidget):
     #         val = selected.eval()
     #         if DEBUG_CONTEXT: print("EVALUATED:", val)
 
-
     def handleEdgeContextMenu(self, event):
         if DEBUG_CONTEXT: print("CONTEXT: EDGE")
         context_menu = QMenu(self)
         bezierAct = context_menu.addAction("Bezier Edge")
         directAct = context_menu.addAction("Direct Edge")
         squareAct = context_menu.addAction("Square Edge")
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        action = context_menu.exec(self.mapToGlobal(event.pos()))
 
         selected = None
         item = self.scene.getItemAt(event.pos())
@@ -174,6 +183,7 @@ class CalculatorSubWindow(NodeEditorWidget):
         if selected and action == bezierAct: selected.edge_type = EDGE_TYPE_BEZIER
         if selected and action == directAct: selected.edge_type = EDGE_TYPE_DIRECT
         if selected and action == squareAct: selected.edge_type = EDGE_TYPE_SQUARE
+
 
     # helper functions
     def determine_target_socket_of_node(self, was_dragged_flag, new_calc_node):
@@ -211,3 +221,4 @@ class CalculatorSubWindow(NodeEditorWidget):
 
             else:
                 self.scene.history.storeHistory("Created %s" % new_calc_node.__class__.__name__)
+
