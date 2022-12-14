@@ -40,7 +40,7 @@ class CalcNode_Output(CalcNode):
             self.markInvalid()
             return
 
-        self.content.lbl.setText(val)
+        self.content.lbl.setText("%d" % val)
         self.markInvalid(False)
         self.markDirty(False)
         self.grNode.setToolTip("")
