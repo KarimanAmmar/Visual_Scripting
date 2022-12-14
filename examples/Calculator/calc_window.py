@@ -36,7 +36,7 @@ class CalculatorWindow(NodeEditorWindow):
 
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
         loadStylesheets(
-            os.path.join(os.path.dirname(__file__), "qss/nodeeditor-dark.qss"),
+            os.path.join(os.path.dirname(__file__), "qss/SpyBot.qss"),
             self.stylesheet_filename
         )
 
@@ -98,6 +98,17 @@ class CalculatorWindow(NodeEditorWindow):
         self.actSeparator.setSeparator(True)
 
         self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
+        self.actTheme = QAction('&Original Theme', self, shortcut='Alt+1', statusTip="Change Theme",
+                                triggered=self.originTheme)
+        self.actTheme2 = QAction('Dark-Gray THEME', self, shortcut='Alt+3', statusTip="Change Theme",
+                                triggered=self.darkGrayTheme)
+        self.actTheme3 = QAction('Gray THEME', self, shortcut='Alt+5', statusTip="Change Theme",
+                                triggered=self.darkTheme)
+        self.actTheme4 = QAction('Light THEME', self, shortcut='Alt+2', statusTip="Change Theme",
+                                triggered=self.lightTheme)
+        self.actTheme5 = QAction('Dark-Orange THEME', self, shortcut='Alt+4', statusTip="Change Theme",
+                                triggered=self.darkOrangeTheme)
+
 
     def getCurrentNodeEditorWidget(self):
         """ we're returning NodeEditorWidget here... """
@@ -148,6 +159,7 @@ class CalculatorWindow(NodeEditorWindow):
         self.windowMenu = self.menuBar().addMenu("&Window")
         self.updateWindowMenu()
         self.windowMenu.aboutToShow.connect(self.updateWindowMenu)
+        self.createThemeMenu()
 
         self.menuBar().addSeparator()
 
@@ -155,6 +167,16 @@ class CalculatorWindow(NodeEditorWindow):
         self.helpMenu.addAction(self.actAbout)
 
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
+
+    def createThemeMenu(self):
+        menubar = self.menuBar()
+        self.themeMenu = menubar.addMenu('&Theme')
+        self.themeMenu.addAction(self.actTheme)
+        self.themeMenu.addAction(self.actTheme4)
+        self.themeMenu.addAction(self.actTheme2)
+        self.themeMenu.addAction(self.actTheme5)
+        self.themeMenu.addAction(self.actTheme3)
+
 
     def updateMenus(self):
         # print("update Menus")
@@ -278,3 +300,44 @@ class CalculatorWindow(NodeEditorWindow):
     def setActiveSubWindow(self, window):
         if window:
             self.mdiArea.setActiveSubWindow(window)
+
+    def darkTheme(self):
+         if self.getCurrentNodeEditorWidget():
+             self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+             loadStylesheets(
+                 os.path.join(os.path.dirname(__file__), "qss/nodeeditor-dark.qss"),
+                 self.stylesheet_filename
+             )
+
+
+    def originTheme(self):
+        if self.getCurrentNodeEditorWidget():
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            loadStylesheets(
+                os.path.join(os.path.dirname(__file__), "qss/SpyBot.qss"),
+                self.stylesheet_filename
+            )
+
+    def lightTheme(self):
+        if self.getCurrentNodeEditorWidget():
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            loadStylesheets(
+                os.path.join(os.path.dirname(__file__), "qss/PicPax.qss"),
+                self.stylesheet_filename
+            )
+
+    def darkOrangeTheme(self):
+        if self.getCurrentNodeEditorWidget():
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            loadStylesheets(
+                os.path.join(os.path.dirname(__file__), "qss/darkorange.qss"),
+                self.stylesheet_filename
+            )
+
+    def darkGrayTheme(self):
+        if self.getCurrentNodeEditorWidget():
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            loadStylesheets(
+                os.path.join(os.path.dirname(__file__), "qss/darkgray.qss"),
+                self.stylesheet_filename
+            )

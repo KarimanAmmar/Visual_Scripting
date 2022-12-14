@@ -6,6 +6,7 @@ import os, json
 from qtpy.QtCore import QSize, QSettings, QPoint
 from qtpy.QtWidgets import QMainWindow, QLabel, QAction, QMessageBox, QFileDialog, QApplication
 from nodeeditor.base_system_properties.home_widget import NodeEditorWidget
+from nodeeditor.base_system_properties.utils import loadStylesheets
 
 
 class NodeEditorWindow(QMainWindow):
@@ -60,13 +61,16 @@ class NodeEditorWindow(QMainWindow):
         self.actCut = QAction('Cu&t', self, shortcut='Ctrl+X', statusTip="Cut to clipboard", triggered=self.onEditCut)
         self.actCopy = QAction('&Copy', self, shortcut='Ctrl+C', statusTip="Copy to clipboard", triggered=self.onEditCopy)
         self.actPaste = QAction('&Paste', self, shortcut='Ctrl+V', statusTip="Paste from clipboard", triggered=self.onEditPaste)
+
         self.actDelete = QAction('&Delete', self, shortcut='Del', statusTip="Delete selected items", triggered=self.onEditDelete)
+
 
 
     def createMenus(self):
         """Create Menus for `File` and `Edit`"""
         self.createFileMenu()
         self.createEditMenu()
+
 
     def createFileMenu(self):
         menubar = self.menuBar()
@@ -90,6 +94,8 @@ class NodeEditorWindow(QMainWindow):
         self.editMenu.addAction(self.actPaste)
         self.editMenu.addSeparator()
         self.editMenu.addAction(self.actDelete)
+
+
 
     def createStatusBar(self):
         """Create Status bar and connect to `Graphics View` scenePosChanged event"""
@@ -169,6 +175,7 @@ class NodeEditorWindow(QMainWindow):
     def getFileDialogFilter(self):
         """Returns ``str`` standard file open/save filter for ``QFileDialog``"""
         return 'Graph (*.json);;All files (*)'
+
 
     def onFileNew(self):
         """Hande File New operation"""
