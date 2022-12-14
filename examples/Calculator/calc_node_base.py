@@ -94,7 +94,7 @@ class CalcNode(AllNodeFunctions):
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid():
-            print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
+            # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
             return self.value
 
         try:
@@ -113,7 +113,7 @@ class CalcNode(AllNodeFunctions):
 
 
     def onInputChanged(self, socket=None):
-        print("%s::__onInputChanged" % self.__class__.__name__)
+        # print("%s::__onInputChanged" % self.__class__.__name__)
         self.markDirty()
         self.eval()
 
@@ -125,5 +125,5 @@ class CalcNode(AllNodeFunctions):
 
     def deserialize(self, data, hashmap={}, restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)
-        print("Deserialized CalcNode '%s'" % self.__class__.__name__, "res:", res)
+        # print("Deserialized CalcNode '%s'" % self.__class__.__name__, "res:", res)
         return res
