@@ -7,6 +7,7 @@ from nodeeditor.base_system_properties.home_widget import NodeEditorWidget
 from nodeeditor.base_edges.func_edge import EDGE_TYPE_DIRECT, EDGE_TYPE_BEZIER, EDGE_TYPE_SQUARE
 from nodeeditor.base_system_properties.graphical_view import MODE_EDGE_DRAG
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
+from nodeeditor.base_nodes.func_node import AllNodeFunctions
 
 DEBUG = False
 DEBUG_CONTEXT = False
@@ -30,7 +31,7 @@ class CalculatorSubWindow(NodeEditorWidget):
         self._close_event_listeners = []
 
     def getNodeClassFromData(self, data):
-        if 'op_code' not in data: return Node
+        if 'op_code' not in data: return AllNodeFunctions
         return get_class_from_opcode(data['op_code'])
 
     def doEvalOutputs(self):
