@@ -28,6 +28,7 @@ class NodeEditorWindow(QMainWindow):
         self.createHomeWindow()
 
 
+
     def createHomeWindow(self):
         """Set up this ``QMainWindow``. Create :class:`~nodeeditor.node_editor_widget.NodeEditorWidget`, Actions and Menus"""
         self.createActions()

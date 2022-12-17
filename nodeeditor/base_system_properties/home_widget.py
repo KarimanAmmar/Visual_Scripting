@@ -3,6 +3,8 @@
 A module containing ``NodeEditorWidget`` class
 """
 import os
+
+from PyQt5.QtCore import QRect
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QBrush, QPen, QFont, QColor
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QApplication, QMessageBox, QLabel, QGraphicsItem, QTextEdit, QPushButton
@@ -42,12 +44,15 @@ class NodeEditorWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
+
+
         # crate graphics scene
         self.scene = self.__class__.Scene_class()
 
         # create graphics view
         self.view = self.__class__.GraphicsView_class(self.scene.grScene, self)
         self.layout.addWidget(self.view)
+
 
 
     def isModified(self) -> bool:

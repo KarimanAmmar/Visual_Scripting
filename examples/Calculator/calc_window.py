@@ -1,4 +1,9 @@
 import os
+
+from PyQt5.QtCore import QRect
+from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsProxyWidget
+from Qt import QtWidgets
+from PyQt5 import QtCore
 from qtpy.QtGui import QIcon, QKeySequence
 from qtpy.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 from qtpy.QtCore import Qt, QSignalMapper
@@ -46,7 +51,6 @@ class CalculatorWindow(NodeEditorWindow):
             print("Registered nodes:")
             pp(CALC_NODES)
 
-
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.mdiArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -54,7 +58,13 @@ class CalculatorWindow(NodeEditorWindow):
         self.mdiArea.setDocumentMode(True)
         self.mdiArea.setTabsClosable(True)
         self.mdiArea.setTabsMovable(True)
+        self.mdiArea.showMaximized()
         self.setCentralWidget(self.mdiArea)
+
+        # self.pushButton = QPushButton(self.mdiArea)
+        # self.pushButton.setGeometry(QRect(1030, 5, 25, 25))
+        # # adding signal and slot
+        # # self.pushButton.clicked.connect(self.changelabeltext())
 
         self.mdiArea.subWindowActivated.connect(self.updateMenus)
         self.windowMapper = QSignalMapper(self)
@@ -98,6 +108,7 @@ class CalculatorWindow(NodeEditorWindow):
         self.actSeparator.setSeparator(True)
 
         self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
+
         self.actTheme = QAction('&Original Theme', self, shortcut='Alt+1', statusTip="Change Theme",
                                 triggered=self.originTheme)
         self.actTheme2 = QAction('Dark-Gray THEME', self, shortcut='Alt+3', statusTip="Change Theme",
@@ -108,6 +119,35 @@ class CalculatorWindow(NodeEditorWindow):
                                 triggered=self.lightTheme)
         self.actTheme5 = QAction('Dark-Orange THEME', self, shortcut='Alt+4', statusTip="Change Theme",
                                 triggered=self.darkOrangeTheme)
+
+        self.actRun = QAction("Evaluate All Nodes ", self, shortcut='Ctrl+R', statusTip="RUN ALL NODES",  triggered= self.RunNodes)
+
+    def RunNodes(self):
+        pass
+
+        # QMessageBox.about(self, "About Calculator NodeEditor Example",
+        #         "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
+        #         "document interface applications using PyQt5 and NodeEditor. For more information visit: "
+        #         "<a href='https://www.blenderfreak.com/'>www.BlenderFreak.com</a>")
+
+        # for node in self.scene.nodes:
+        #     if node.__class__.__name__ == "CalcNode_Output":
+        #         node.nodeEvaluation()
+
+        # selected = None
+        # item = self.scene.getItemAt(self.scene.grScene
+        #                             )
+        # if type(item) == QGraphicsProxyWidget:
+        #     item = item.widget()
+        #
+        # if hasattr(item, 'node'):
+        #     selected = item.node
+        # if hasattr(item, 'socket'):
+        #     selected = item.socket.node
+        #
+        # val = selected.nodeEvaluation()
+        #
+        # pass
 
 
     def getCurrentNodeEditorWidget(self):
@@ -177,6 +217,7 @@ class CalculatorWindow(NodeEditorWindow):
         self.themeMenu.addAction(self.actTheme5)
         self.themeMenu.addAction(self.actTheme3)
 
+        self.themeMenu.addAction(self.actRun)
 
     def updateMenus(self):
         # print("update Menus")

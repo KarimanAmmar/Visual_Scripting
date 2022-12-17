@@ -26,23 +26,38 @@ class CalcNode_Output(CalcNode):
         self.content = CalcOutputContent(self)
         self.grNode = CalcGraphicsNode(self)
 
-    def evalImplementation(self):
-        input_node = self.getInput(0)
-        if not input_node:
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        if finput_port is not None:
+            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+        else:
+            self.markReady()
+
+    def evaluationImplementation(self):
+        input_socket = self.getInput(0)
+        if not input_socket:
             self.grNode.setToolTip("Input is not connected")
             self.markInvalid()
             return
 
-        val = input_node.eval()
+        val = input_socket.nodeEvaluation()
 
         if val is None:
             self.grNode.setToolTip("Input is NaN")
             self.markInvalid()
             return
 
-        self.content.lbl.setText("%d" % val)
-        self.markInvalid(False)
-        self.markDirty(False)
-        self.grNode.setToolTip("")
+        if int(val):
+            self.content.lbl.setText(f"{val}")
+            self.markInvalid(False)
+            self.markReady(False)
+            self.grNode.setToolTip("")
+
+        elif not int(val):
+            self.content.lbl.setText(f"{val}")
+            self.markInvalid(False)
+            self.markReady(False)
+            self.grNode.setToolTip("")
 
         return val

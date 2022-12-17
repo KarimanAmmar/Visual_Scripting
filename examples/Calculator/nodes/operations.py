@@ -11,7 +11,20 @@ class CalcNode_Add(CalcNode):
     content_label = "+"
     content_label_objname = "calc_node_bg"
 
-    def evalOperation(self, input1, input2):
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        sinput_port = self.getInput(1)
+        foutput_port = self.getOutputs(0)
+
+        if finput_port and sinput_port and foutput_port is not None:
+            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+        elif finput_port or sinput_port or foutput_port is None:
+            self.markInvalid()
+        elif finput_port and sinput_port and foutput_port is None:
+            self.markReady()
+
+    def evaluationOperation(self, input1, input2):
         return input1 + input2
 
 
@@ -23,7 +36,17 @@ class CalcNode_Sub(CalcNode):
     content_label = "-"
     content_label_objname = "calc_node_bg"
 
-    def evalOperation(self, input1, input2):
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        sinput_port = self.getInput(1)
+
+        if finput_port and sinput_port is not None:
+            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+        else:
+            self.markInvalid()
+
+    def evaluationOperation(self, input1, input2):
         return input1 - input2
 
 
@@ -35,8 +58,18 @@ class CalcNode_Mul(CalcNode):
     content_label = "*"
     content_label_objname = "calc_node_mul"
 
-    def evalOperation(self, input1, input2):
-        print('foo')
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        sinput_port = self.getInput(1)
+
+        if finput_port and sinput_port is not None:
+            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+        else:
+            self.markInvalid()
+
+    def evaluationOperation(self, input1, input2):
+        # print('foo')
         return input1 * input2
 
 
@@ -48,7 +81,17 @@ class CalcNode_Div(CalcNode):
     content_label = "/"
     content_label_objname = "calc_node_div"
 
-    def evalOperation(self, input1, input2):
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        sinput_port = self.getInput(1)
+
+        if finput_port and sinput_port is not None:
+            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+        else:
+            self.markInvalid()
+
+    def evaluationOperation(self, input1, input2):
         return input1 / input2
 
 
