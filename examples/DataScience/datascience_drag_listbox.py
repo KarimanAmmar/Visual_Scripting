@@ -3,7 +3,6 @@ from qtpy.QtCore import QSize, Qt, QByteArray, QDataStream, QMimeData, QIODevice
 from qtpy.QtWidgets import QListWidget, QAbstractItemView, QListWidgetItem
 
 from examples.DataScience.datascience_conf import DS_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
-from examples.DataScience.datascience_conf import *
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 
@@ -20,16 +19,17 @@ class GraphicalDragListBox(QListWidget):
 
         self.addMyItems()
 
+
     def addMyItems(self):
-        self.addMyItem("READ CSV", "icons/in.png", OP_NODE_READ_CSV)
-        # self.addMyItem("Output", "icons/out.png", OP_NODE_OUTPUT)
-        # self.addMyItem("Add", "icons/add.png", OP_NODE_ADD)
-        # self.addMyItem("Substract", "icons/sub.png", OP_NODE_SUB)
-        # self.addMyItem("Multiply", "icons/mul.png", OP_NODE_MUL)
-        # self.addMyItem("Divide", "icons/divide.png", OP_NODE_DIV)
+        keys = list(DS_NODES.keys())
+        keys.sort()
+        for key in keys:
+            node = get_class_from_opcode(key)
+            self.addMyItem(node.op_title, node.icon, node.op_code)
+
 
     def addMyItem(self, name, icon=None, op_code=0):
-        item = QListWidgetItem(name, self)  # can be (icon, text, parent, <int>type)
+        item = QListWidgetItem(name, self) # can be (icon, text, parent, <int>type)
         pixmap = QPixmap(icon if icon is not None else ".")
         item.setIcon(QIcon(pixmap))
         item.setSizeHint(QSize(32, 32))
@@ -39,6 +39,7 @@ class GraphicalDragListBox(QListWidget):
         # setup data
         item.setData(Qt.UserRole, pixmap)
         item.setData(Qt.UserRole + 1, op_code)
+
 
     def startDrag(self, *args, **kwargs):
         try:

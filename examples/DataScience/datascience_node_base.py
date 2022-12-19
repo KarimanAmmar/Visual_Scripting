@@ -33,7 +33,7 @@ class DataScienceGraphicalNode(DrawGraphicalNode):
 
         if self.node.isReady(): offset = 0.0
 
-        # to detirmin the which picture we will take of the three picturs
+        #to detirmin the which picture we will take of the three picturs
         if self.node.isInvalid(): offset = 48.0
 
         painter.drawImage(
@@ -59,7 +59,7 @@ class DataScienceNode(AllNodeFunctions):
     GraphicsNode_class = DataScienceGraphicalNode
     NodeContent_class = DataScienceContent
 
-    def __init__(self, scene, inputs=[1,1], outputs=[1,1]):
+    def __init__(self, scene, inputs=[4,4], outputs=[4]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
 
         self.value = None
@@ -72,6 +72,65 @@ class DataScienceNode(AllNodeFunctions):
         self.input_socket_position = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
-    def initInnerClasses(self):
-        self.content = DataScienceContent(self)
-        self.grNode = DataScienceGraphicalNode(self)
+    def nodeEvaluation(self):  # eval >> which was inherted from  All Node Functions Class  = BASE NODE CLASS
+        if not self.isReady() and not self.isInvalid():
+            # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
+            return self.value
+
+        try:
+
+            val = self.evaluationImplementation()
+            return val
+
+        except ValueError as e:
+            self.markInvalid()
+            self.grNode.setToolTip(str(e))
+            self.markDescendantsInvalid()
+
+        except Exception as e:
+            self.markInvalid()
+            self.grNode.setToolTip(str(e))
+            dumpException(e)
+
+
+    def evaluationImplementation(self):  # evalImplementation
+        first_input = self.getInput(0)
+        seconed_input = self.getInput(1)
+
+        if first_input is None or seconed_input is None:
+            self.markInvalid()
+            self.markDescendantsInvalid()
+            self.grNode.setToolTip("Please connect all inputs")
+
+            return None
+
+        else:
+            val = self.evaluationOperation(first_input.nodeEvaluation(), seconed_input.nodeEvaluation())
+            self.value = val
+
+            # to paint the Evaluated State with the green sign
+            self.markReady(False)
+            self.markInvalid(False)
+
+            self.grNode.setToolTip("")
+
+            return val
+
+    def evaluationOperation(self, input1, input2):  # evalOperation()
+        return 123
+
+    def onInputChanged(self, socket=None):
+        # print("%s::__onInputChanged" % self.__class__.__name__)
+        self.markReady()
+        # self.markInvalid()
+        # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+
+    def serialize(self):
+        res = super().serialize()
+        res['op_code'] = self.__class__.op_code
+        return res
+
+    def deserialize(self, data, hashmap={}, restore_id=True):
+        res = super().deserialize(data, hashmap, restore_id)
+        # print("Deserialized CalcNode '%s'" % self.__class__.__name__, "res:", res)
+        return res

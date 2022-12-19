@@ -108,14 +108,7 @@ class DataScienceSubWindow(NodeEditorWidget):
             mouse_position = event.pos()
             scene_position = self.scene.grScene.views()[0].mapToScene(mouse_position)
 
-            print("GOT DROP: [%d] '%s'" % (op_code, text), "mouse:", mouse_position, "scene:", scene_position)
-
-            # try:
-            #     node = get_class_from_opcode(op_code)(self.scene)
-            #     node.setPos(scene_position.x(), scene_position.y())
-            #     self.scene.history.storeHistory("Created node %s" % node.__class__.__name__)
-            # except Exception as e:
-            #     dumpException(e)
+            if DEBUG: print("GOT DROP: [%d] '%s'" % (op_code, text), "mouse:", mouse_position, "scene:", scene_position)
 
             try:
                 node = get_class_from_opcode(op_code)(self.scene)
@@ -123,6 +116,9 @@ class DataScienceSubWindow(NodeEditorWidget):
                 self.scene.history.storeHistory("Created node %s" % node.__class__.__name__)
             except Exception as e:
                 dumpException(e)
+
+            event.setDropAction(Qt.MoveAction)
+            event.accept()
 
             event.setDropAction(Qt.MoveAction)
             event.accept()
