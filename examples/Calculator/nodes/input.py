@@ -1,4 +1,5 @@
 from PyQt5.QtGui import QColor, QFont, QPen, QBrush
+from PyQt5.QtWidgets import QMessageBox
 from qtpy.QtWidgets import QLineEdit
 from qtpy.QtCore import Qt
 from examples.Calculator.calc_conf import register_node, OP_NODE_INPUT
@@ -38,27 +39,31 @@ class CalcNode_Input(CalcNode):
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[3])
-        self.eval()
-
-
+        self.nodeEvaluation()  # eval() from the calculator node base
 
     def getInnerClasses(self):
         self.content = CalcInputContent(self)
         self.grNode = CalcGraphicsNode(self)
         self.content.edit.textChanged.connect(self.onInputChanged)
 
-    def evalImplementation(self):
-        u_value = self.content.edit.text()
-        s_value = int(u_value)
-        self.value = s_value
-        self.markDirty(False)
+    def evaluationImplementation(self):  # evalImplementation which is in eval which become nodeEvaluations to override the calculatorEvaluationImp of the calculator node base
+
+        user_input = self.content.edit.text()
+        constrainted_value = int(user_input)
+        self.value = constrainted_value
+
+        self.markReady(False)
         self.markInvalid(False)
 
         self.markDescendantsInvalid(False)
-        self.markDescendantsDirty()
+        self.markDescendantsReady()
 
         self.grNode.setToolTip("")
 
-        self.evalChildren()
+        self.nodeChildrenEvaluation()
 
         return self.value
+
+    def onInputChanged(self, socket=None):
+        super().onInputChanged()
+        self.nodeEvaluation()

@@ -24,11 +24,16 @@ class CalcGraphicsNode(DrawGraphicalNode):
 
         self.icons = QImage("icons/status_icons.png")
 
+    # to draw the states of each node of the calculator nodes
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         super().paint(painter, QStyleOptionGraphicsItem, widget)
 
+        # to determin the hight of the picture that we will take the status from
         offset = 24.0
-        if self.node.isDirty(): offset = 0.0
+
+        if self.node.isReady(): offset = 0.0
+
+        #to detirmin the which picture we will take of the three picturs
         if self.node.isInvalid(): offset = 48.0
 
         painter.drawImage(
@@ -59,65 +64,66 @@ class CalcNode(AllNodeFunctions):
 
         self.value = None
 
-        # it's really important to mark all nodes Dirty by default
-        self.markDirty()
-
+        # it's really important to mark all nodes Ready (Undefined = (Dirty) ) by default
+        self.markReady()  # (markDirty)
 
     def nodeSettings(self):
         super().nodeSettings()
         self.input_socket_position = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
-    def evalOperation(self, input1, input2):
-        return 123
-
-    def evalImplementation(self):
-        i1 = self.getInput(0)
-        i2 = self.getInput(1)
-
-        if i1 is None or i2 is None:
-            self.markInvalid()
-            self.markDescendantsDirty()
-            self.grNode.setToolTip("Connect all inputs")
-            return None
-
-        else:
-            val = self.evalOperation(i1.eval(), i2.eval())
-            self.value = val
-            self.markDirty(False)
-            self.markInvalid(False)
-            self.grNode.setToolTip("")
-
-            self.markDescendantsDirty()
-            self.evalChildren()
-
-            return val
-
-    def eval(self):
-        if not self.isDirty() and not self.isInvalid():
+    def nodeEvaluation(self):  # eval >> which was inherted from  All Node Functions Class  = BASE NODE CLASS
+        if not self.isReady() and not self.isInvalid():
             # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
             return self.value
 
         try:
 
-            val = self.evalImplementation()
+            val = self.evaluationImplementation()
             return val
+
         except ValueError as e:
             self.markInvalid()
             self.grNode.setToolTip(str(e))
-            self.markDescendantsDirty()
+            self.markDescendantsInvalid()
+
         except Exception as e:
             self.markInvalid()
             self.grNode.setToolTip(str(e))
             dumpException(e)
 
 
+    def evaluationImplementation(self):  # evalImplementation
+        first_input = self.getInput(0)
+        seconed_input = self.getInput(1)
+
+        if first_input is None or seconed_input is None:
+            self.markInvalid()
+            self.markDescendantsInvalid()
+            self.grNode.setToolTip("Please connect all inputs")
+
+            return None
+
+        else:
+            val = self.evaluationOperation(first_input.nodeEvaluation(), seconed_input.nodeEvaluation())
+            self.value = val
+
+            # to paint the Evaluated State with the green sign
+            self.markReady(False)
+            self.markInvalid(False)
+
+            self.grNode.setToolTip("")
+
+            return val
+
+    def evaluationOperation(self, input1, input2):  # evalOperation()
+        return 123
 
     def onInputChanged(self, socket=None):
         # print("%s::__onInputChanged" % self.__class__.__name__)
-        self.markDirty()
-        self.eval()
-
+        self.markReady()
+        # self.markInvalid()
+        # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
 
     def serialize(self):
         res = super().serialize()

@@ -10,14 +10,14 @@ class CalcNode_Greater(CalcNode):
 
     # content_label_objname = "calc_node_gt"
 
-    def evalOperation(self, input1, input2):
+    def evaluationOperation(self, input1, input2):
         self.resultF = 'False'
         if input1 > input2:
             return input1
         elif input2 > input1:
             return input2
         elif input1 == input2:
-            return self.resultF
+            return input1
 
 
 @register_node(OP_NODE_LESS)
@@ -29,14 +29,14 @@ class CalcNode_Less(CalcNode):
 
     # content_label_objname = "calc_node_gt"
 
-    def evalOperation(self, input1, input2):
+    def evaluationOperation(self, input1, input2):
         self.resultF = 'False'
         if input1 < input2:
             return input1
         elif input2 < input1:
             return input2
         elif input1 == input2:
-            return self.resultF
+            return input1
 
 
 # @register_node(OP_NODE_EQUAL)

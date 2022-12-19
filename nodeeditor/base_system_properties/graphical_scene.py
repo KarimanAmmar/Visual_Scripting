@@ -3,6 +3,8 @@
 A module containing Graphic representation of :class:`~nodeeditor.node_scene.Scene`
 """
 import math
+
+from PyQt5.QtWidgets import QPushButton
 from qtpy.QtWidgets import QGraphicsScene, QWidget
 from qtpy.QtCore import Signal, QRect, QLine, Qt
 from qtpy.QtGui import QColor, QPen, QFont, QPainter
@@ -44,7 +46,6 @@ class DrawGraphicalScene(QGraphicsScene):
         self.gridSquares = 5
 
         self.drawingAssets()
-
 
     def drawingAssets(self):
         """Initialize ``QObjects`` like ``QColor``, ``QPen`` and ``QBrush``"""

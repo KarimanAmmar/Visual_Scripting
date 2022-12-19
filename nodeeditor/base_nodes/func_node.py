@@ -61,7 +61,7 @@ class AllNodeFunctions(Serializable):
         self.createNodeSockets(inputs, outputs)
 
         # dirty and evaluation
-        self._is_dirty = False
+        self._is_ready = False
         self._is_invalid = False
 
     def __str__(self):
@@ -195,8 +195,8 @@ class AllNodeFunctions(Serializable):
         :param socket: reference to the changed :class:`~nodeeditor.node_socket.Socket`
         :type socket: :class:`~nodeeditor.func_socket.Socket`
         """
-        self.markDirty()
-        self.markDescendantsDirty()
+        self.markInvalid(True)
+        self.markDescendantsInvalid(True)
 
     def onDeserialized(self, data: dict):
         """Event manually called when this node was deserialized. Currently called when node is deserialized from scene
@@ -308,45 +308,46 @@ class AllNodeFunctions(Serializable):
 
     # node evaluation stuff
 
-    def isDirty(self) -> bool:
+    def isReady(self) -> bool:
         """Is this node marked as `Dirty`
 
         :return: ``True`` if `Node` is marked as `Dirty`
         :rtype: ``bool``
         """
-        return self._is_dirty
+        return self._is_ready
 
-    def markDirty(self, new_value: bool=True):
+    def markReady(self, new_value: bool=True):
         """Mark this `Node` as `Dirty`. See :ref:`evaluation` for more
 
         :param new_value: ``True`` if this `Node` should be `Dirty`. ``False`` if you want to un-dirty this `Node`
         :type new_value: ``bool``
         """
-        self._is_dirty = new_value
-        if self._is_dirty: self.onMarkedDirty()
+        self._is_ready = new_value
+        if self._is_ready:
+            self.onMarkedReady()
 
-    def onMarkedDirty(self):
+    def onMarkedReady(self):
         """Called when this `Node` has been marked as `Dirty`. This method is supposed to be overridden"""
         pass
 
-    def markChildrenDirty(self, new_value: bool=True):
-        """Mark all first level children of this `Node` to be `Dirty`. Not this `Node` it self. Not other descendants
+    def markChildrenReady(self, new_value: bool=True):
+        """Mark all first level children of this `Node` to be `Dirty`. Not this `Node` itself. Not other descendants
 
         :param new_value: ``True`` if children should be `Dirty`. ``False`` if you want to un-dirty children
         :type new_value: ``bool``
         """
         for other_node in self.getChildrenNodes():
-            other_node.markDirty(new_value)
+            other_node.markReady(new_value)
 
-    def markDescendantsDirty(self, new_value: bool=True):
-        """Mark all children and descendants of this `Node` to be `Dirty`. Not this `Node` it self
+    def markDescendantsReady(self, new_value: bool=True):
+        """Mark all children and descendants of this `Node` to be `Dirty`. Not this `Node` itself
 
         :param new_value: ``True`` if children and descendants should be `Dirty`. ``False`` if you want to un-dirty children and descendants
         :type new_value: ``bool``
         """
         for other_node in self.getChildrenNodes():
-            other_node.markDirty(new_value)
-            other_node.markDescendantsDirty(new_value)
+            other_node.markReady(new_value)
+            other_node.markDescendantsReady(new_value)
 
     def isInvalid(self) -> bool:
         """Is this node marked as `Invalid`?
@@ -363,14 +364,15 @@ class AllNodeFunctions(Serializable):
         :type new_value: ``bool``
         """
         self._is_invalid = new_value
-        if self._is_invalid: self.onMarkedInvalid()
+        if self._is_invalid:
+            self.onMarkedInvalid()
 
     def onMarkedInvalid(self):
         """Called when this `Node` has been marked as `Invalid`. This method is supposed to be overridden"""
         pass
 
     def markChildrenInvalid(self, new_value: bool=True):
-        """Mark all first level children of this `Node` to be `Invalid`. Not this `Node` it self. Not other descendants
+        """Mark all first level children of this `Node` to be `Invalid`. Not this `Node` itself. Not other descendants
 
         :param new_value: ``True`` if children should be `Invalid`. ``False`` if you want to make children valid
         :type new_value: ``bool``
@@ -379,7 +381,7 @@ class AllNodeFunctions(Serializable):
             other_node.markInvalid(new_value)
 
     def markDescendantsInvalid(self, new_value: bool=True):
-        """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` it self
+        """Mark all children and descendants of this `Node` to be `Invalid`. Not this `Node` itself
 
         :param new_value: ``True`` if children and descendants should be `Invalid`. ``False`` if you want to make children and descendants valid
         :type new_value: ``bool``
@@ -388,17 +390,20 @@ class AllNodeFunctions(Serializable):
             other_node.markInvalid(new_value)
             other_node.markDescendantsInvalid(new_value)
 
-    def eval(self, index=0):
+    def nodeEvaluation(self, index=0):
         """Evaluate this `Node`. This is supposed to be overridden. See :ref:`evaluation` for more"""
 
-        self.markDirty(False)
+
+        # MARK THEM FALSE TO DRAW THE SIGN OF THE EVALUATION
+        self.markReady(False)
         self.markInvalid(False)
+
         return 0
 
-    def evalChildren(self):
+    def nodeChildrenEvaluation(self):
         """Evaluate all children of this `Node`"""
         for node in self.getChildrenNodes():
-            node.eval()
+            node.nodeEvaluation()
 
 
     # traversing nodes functions
