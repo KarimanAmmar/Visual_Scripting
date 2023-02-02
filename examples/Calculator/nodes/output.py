@@ -1,13 +1,13 @@
 from qtpy.QtWidgets import QLabel
 from qtpy.QtCore import Qt
-from examples.Calculator.calc_conf import register_node, OP_NODE_OUTPUT
+from GeneralForm.nodes_configuration import register_node, OP_NODE_OUTPUT
 from examples.Calculator.calc_node_base import CalcNode, CalcGraphicsNode
 from nodeeditor.base_nodes.func_content_widget import AllContentWidgetFunctions
 
 
 class CalcOutputContent(AllContentWidgetFunctions):
     def createContentWidget(self):
-        self.lbl = QLabel("42", self)
+        self.lbl = QLabel("", self)
         self.lbl.setAlignment(Qt.AlignLeft)
         self.lbl.setObjectName(self.node.content_label_objname)
 

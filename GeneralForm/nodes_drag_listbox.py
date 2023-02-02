@@ -2,7 +2,7 @@ from qtpy.QtGui import QPixmap, QIcon, QDrag
 from qtpy.QtCore import QSize, Qt, QByteArray, QDataStream, QMimeData, QIODevice, QPoint
 from qtpy.QtWidgets import QListWidget, QAbstractItemView, QListWidgetItem
 
-from examples.Calculator.calc_conf import CALC_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
+from GeneralForm.nodes_configuration import CALC_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 

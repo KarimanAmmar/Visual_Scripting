@@ -3,7 +3,7 @@ from qtpy.QtWidgets import QApplication
 
 sys.path.insert(0, os.path.join( os.path.dirname(__file__), "..", ".." ))
 
-from examples.Calculator.calc_window import CalculatorWindow
+from GeneralForm.main_window import CalculatorWindow
 
 
 if __name__ == '__main__':

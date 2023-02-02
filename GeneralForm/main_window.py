@@ -6,10 +6,10 @@ from qtpy.QtCore import Qt, QSignalMapper
 
 from nodeeditor.base_system_properties.utils import loadStylesheets
 from nodeeditor.base_system_properties.home_window import NodeEditorWindow
-from examples.Calculator.calc_sub_window import CalculatorSubWindow
-from examples.Calculator.calc_drag_listbox import GraphicalDragListBox
+from GeneralForm.sub_window import CalculatorSubWindow
+from GeneralForm.nodes_drag_listbox import GraphicalDragListBox
 from nodeeditor.base_system_properties.utils_no_qt import dumpException, pp
-from examples.Calculator.calc_conf import CALC_NODES
+from GeneralForm.nodes_configuration import CALC_NODES
 
 # Enabling edge validators
 from nodeeditor.base_edges.func_edge import AllEdgeFunctions
