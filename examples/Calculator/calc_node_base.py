@@ -92,7 +92,6 @@ class CalcNode(AllNodeFunctions):
             self.grNode.setToolTip(str(e))
             dumpException(e)
 
-
     def evaluationImplementation(self):  # evalImplementation
         first_input = self.getInput(0)
         seconed_input = self.getInput(1)

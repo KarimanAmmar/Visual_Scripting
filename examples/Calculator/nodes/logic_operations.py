@@ -1,4 +1,4 @@
-from examples.Calculator.calc_conf import register_node, OP_NODE_GREATER, OP_NODE_EQUAL, OP_NODE_LESS
+from GeneralForm.nodes_configuration import register_node, OP_NODE_GREATER, OP_NODE_EQUAL, OP_NODE_LESS
 from examples.Calculator.calc_node_base import CalcNode
 
 @register_node(OP_NODE_GREATER)

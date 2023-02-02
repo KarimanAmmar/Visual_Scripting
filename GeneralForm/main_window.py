@@ -1,19 +1,15 @@
 import os
 
-from PyQt5.QtCore import QRect
-from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsProxyWidget
-from Qt import QtWidgets
-from PyQt5 import QtCore
 from qtpy.QtGui import QIcon, QKeySequence
 from qtpy.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 from qtpy.QtCore import Qt, QSignalMapper
 
 from nodeeditor.base_system_properties.utils import loadStylesheets
 from nodeeditor.base_system_properties.home_window import NodeEditorWindow
-from examples.Calculator.calc_sub_window import CalculatorSubWindow
-from examples.Calculator.calc_drag_listbox import GraphicalDragListBox
+from GeneralForm.sub_window import CalculatorSubWindow
+from GeneralForm.nodes_drag_listbox import GraphicalDragListBox
 from nodeeditor.base_system_properties.utils_no_qt import dumpException, pp
-from examples.Calculator.calc_conf import CALC_NODES
+from GeneralForm.nodes_configuration import CALC_NODES
 
 # Enabling edge validators
 from nodeeditor.base_edges.func_edge import AllEdgeFunctions
@@ -39,13 +35,13 @@ class CalculatorWindow(NodeEditorWindow):
         self.name_company = 'Blenderfreak'
         self.name_product = 'Calculator NodeEditor'
 
-        self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+        self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/nodeeditor.qss")
         loadStylesheets(
-            os.path.join(os.path.dirname(__file__), "qss/SpyBot.qss"),
+            os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/SpyBot.qss"),
             self.stylesheet_filename
         )
 
-        self.empty_icon = QIcon(".")
+        self.empty_icon = QIcon("../examples/Calculator")
 
         if DEBUG:
             print("Registered nodes:")
@@ -344,41 +340,46 @@ class CalculatorWindow(NodeEditorWindow):
 
     def darkTheme(self):
          if self.getCurrentNodeEditorWidget():
-             self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+             self.stylesheet_filename = os.path.join(os.path.dirname(__file__),
+                                                     "../examples/Calculator/qss/nodeeditor.qss")
              loadStylesheets(
-                 os.path.join(os.path.dirname(__file__), "qss/nodeeditor-dark.qss"),
+                 os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/nodeeditor-dark.qss"),
                  self.stylesheet_filename
              )
 
 
     def originTheme(self):
         if self.getCurrentNodeEditorWidget():
-            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__),
+                                                    "../examples/Calculator/qss/nodeeditor.qss")
             loadStylesheets(
-                os.path.join(os.path.dirname(__file__), "qss/SpyBot.qss"),
+                os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/SpyBot.qss"),
                 self.stylesheet_filename
             )
 
     def lightTheme(self):
         if self.getCurrentNodeEditorWidget():
-            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__),
+                                                    "../examples/Calculator/qss/nodeeditor.qss")
             loadStylesheets(
-                os.path.join(os.path.dirname(__file__), "qss/PicPax.qss"),
+                os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/PicPax.qss"),
                 self.stylesheet_filename
             )
 
     def darkOrangeTheme(self):
         if self.getCurrentNodeEditorWidget():
-            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__),
+                                                    "../examples/Calculator/qss/nodeeditor.qss")
             loadStylesheets(
-                os.path.join(os.path.dirname(__file__), "qss/darkorange.qss"),
+                os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/darkorange.qss"),
                 self.stylesheet_filename
             )
 
     def darkGrayTheme(self):
         if self.getCurrentNodeEditorWidget():
-            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__),
+                                                    "../examples/Calculator/qss/nodeeditor.qss")
             loadStylesheets(
-                os.path.join(os.path.dirname(__file__), "qss/darkgray.qss"),
+                os.path.join(os.path.dirname(__file__), "../examples/Calculator/qss/darkgray.qss"),
                 self.stylesheet_filename
             )

@@ -1,4 +1,4 @@
-from examples.Calculator.calc_conf import register_node, OP_NODE_GREATER, OP_NODE_EQUAL, OP_NODE_LESS, OP_NODE_ADD, \
+from GeneralForm.nodes_configuration import register_node, OP_NODE_GREATER, OP_NODE_EQUAL, OP_NODE_LESS, OP_NODE_ADD, \
     OP_NODE_SUB, OP_NODE_MUL, OP_NODE_DIV
 from examples.Calculator.calc_node_base import CalcNode
 
@@ -94,7 +94,39 @@ class CalcNode_Div(CalcNode):
     def evaluationOperation(self, input1, input2):
         return input1 / input2
 
-
+# # INTEGER DIV // (5//2) , EXPONENTIATION ** (5**2) , REMINDER % (5%2)
+# @register_node(OP_NODE_DIV)
+# class CalcNode_Div(CalcNode):
+#     icon = "icons/divide.png"
+#     op_code = OP_NODE_DIV
+#     op_title = "Divide"
+#     content_label = "/"
+#     content_label_objname = "calc_node_div"
+#
+#     def evalOperation(self, input1, input2):
+#         return input1 / input2
+#
+# @register_node(OP_NODE_DIV)
+# class CalcNode_Div(CalcNode):
+#     icon = "icons/divide.png"
+#     op_code = OP_NODE_DIV
+#     op_title = "Divide"
+#     content_label = "/"
+#     content_label_objname = "calc_node_div"
+#
+#     def evalOperation(self, input1, input2):
+#         return input1 / input2
+#
+# @register_node(OP_NODE_DIV)
+# class CalcNode_Div(CalcNode):
+#     icon = "icons/divide.png"
+#     op_code = OP_NODE_DIV
+#     op_title = "Divide"
+#     content_label = "/"
+#     content_label_objname = "calc_node_div"
+#
+#     def evalOperation(self, input1, input2):
+#         return input1 / input2
 
 
 # way how to register by function call
