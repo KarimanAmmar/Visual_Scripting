@@ -42,12 +42,10 @@ class DataScienceGraphicalNode(DrawGraphicalNode):
             QRectF(offset, 0, 24.0, 24.0)
         )
 
-
 class DataScienceContent(AllContentWidgetFunctions):
     def createContentWidget(self):
         lbl = QLabel(self.node.content_label, self)
         lbl.setObjectName(self.node.content_label_objname)
-
 
 class DataScienceNode(AllNodeFunctions):
     icon = ""
@@ -117,7 +115,7 @@ class DataScienceNode(AllNodeFunctions):
             return val
 
     def evaluationOperation(self, input1, input2):  # evalOperation()
-        return 123
+        return
 
     def onInputChanged(self, socket=None):
         # print("%s::__onInputChanged" % self.__class__.__name__)
