@@ -41,13 +41,10 @@ class CalcGraphicsNode(DrawGraphicalNode):
             self.icons,
             QRectF(offset, 0, 24.0, 24.0)
         )
-
-
 class CalcContent(AllContentWidgetFunctions):
     def createContentWidget(self):
         lbl = QLabel(self.node.content_label, self)
         lbl.setObjectName(self.node.content_label_objname)
-
 
 class CalcNode(AllNodeFunctions):
     icon = ""

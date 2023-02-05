@@ -37,7 +37,7 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
             table_widget.setRowCount(df.shape[0])
             table_widget.setColumnCount(df.shape[1])
             table_widget.setHorizontalHeaderLabels(list(df.columns))
-            # table_widget.resize(900,1200)
+            table_widget.resize(900,1200)
             # table_widget.setWordWrap(True)
             # table_widget.showMaximized()
 
@@ -46,6 +46,7 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
                 for col in range(df.shape[1]):
                     item = QTableWidgetItem(str(df.iloc[row, col]))
                     table_widget.setItem(row, col, item)
+
 
     def serialize(self):
         res = super().serialize()
@@ -62,12 +63,11 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
             dumpException(e)
         return res
 
-
 @register_node(OP_NODE_SHOW_CSV)
 class DataScienceNodeOUTPUT(DataScienceNode):
     icon = "icons/out.png"
     op_code = OP_NODE_SHOW_CSV
-    op_title = "OUTPUT"
+    op_title = "Show The Data Frame"
     content_label_objname = "calc_node_output"
 
     def __init__(self, scene):
