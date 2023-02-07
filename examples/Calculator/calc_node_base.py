@@ -71,7 +71,7 @@ class CalcNode(AllNodeFunctions):
 
     def nodeEvaluation(self):  # eval >> which was inherted from  All Node Functions Class  = BASE NODE CLASS
         if not self.isReady() and not self.isInvalid():
-            # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
+            print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
             return self.value
 
         try:

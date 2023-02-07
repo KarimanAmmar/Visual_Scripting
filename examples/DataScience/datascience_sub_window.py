@@ -148,7 +148,45 @@ class DataScienceSubWindow(NodeEditorWidget):
         except Exception as e:
             dumpException(e)
 
+    def nodeContextMenu(self, event):
+        if DEBUG_CONTEXT: print("CONTEXT: NODE")
+        context_menu = QMenu(self)
+        # readyAct = context_menu.addAction("State: Ready")  # Mark Dirty >> (READY)  WILL BE THE DEFUALT OF ANY NODE AT THE SCENE EXECPT THE NODES WITH WRONG (INVALID) INPUT TYPES
 
+        # markDirtyDescendantsAct = context_menu.addAction("State: Mark Descendant Dirty")
+
+        # validAct = context_menu.addAction("State: Valid")  # Unmarked Invalid >> Valid (we don't need it cuz when the node become invalid we can't make it valid by force becasue the output will be wrong
+
+        # invalidAct = context_menu.addAction("State: Invalid")  # if user entered wrong inputs for the node >> WE DON"T NEED IT TO BE SHOWN IN NODE CONTEXT MENUE
+
+        evaluatedAct = context_menu.addAction("State: Evaluated")
+
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+
+        selected = None
+        item = self.scene.getItemAt(event.pos())
+        if type(item) == QGraphicsProxyWidget:
+            item = item.widget()
+
+        if hasattr(item, 'node'):
+            selected = item.node
+        if hasattr(item, 'socket'):
+            selected = item.socket.node
+
+        if DEBUG_CONTEXT: print("got item:", selected)
+
+        # if selected and action == readyAct: selected.markReady()
+
+        # if selected and action == markDirtyDescendantsAct: selected.markDescendantsDirty()
+
+        # if selected and action == invalidAct: selected.markInvalid()
+
+        # if selected and action == validAct: selected.markInvalid(False)
+
+        if selected and action == evaluatedAct:
+            val = selected.nodeEvaluation()
+
+            if DEBUG_CONTEXT: print("EVALUATED:", val)
 
     def edgeContextMenu(self, event):
         if DEBUG_CONTEXT: print("CONTEXT: EDGE")
@@ -170,29 +208,58 @@ class DataScienceSubWindow(NodeEditorWidget):
     def emptySpaceContextMenu(self, event):  # CONTEXT OF ANY EMPTY SPACE AT SCENE TO CREATE NODES FROM EXCISTING
 
         if DEBUG_CONTEXT: print("CONTEXT: EMPTY SPACE")
-        #
-        # context_menu = self.showNodesMenu()
-        #
-        # action = context_menu.exec_(self.mapToGlobal(event.pos()))
-        #
-        # if action == self.runact:
-        #     self.doEvalOutputs()
-        #
-        # if action is not None:
-        #     new_calc_node = get_class_from_opcode(action.data())(self.scene)
-        #     scene_pos = self.scene.getView().mapToScene(event.pos())
-        #     new_calc_node.setPos(scene_pos.x(), scene_pos.y())
-        #     if DEBUG_CONTEXT: print("Selected node:", new_calc_node)
-        #
-        #     if self.scene.getView().mode == MODE_EDGE_DRAG:
-        #         # if we were dragging an edge...
-        #         target_socket = self.determine_target_socket_of_node(
-        #             self.scene.getView().dragging.drag_start_socket.is_output, new_calc_node)
-        #         if target_socket is not None:
-        #             self.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
-        #             self.finish_new_node_state(new_calc_node)
-        #     else:
-        #         self.scene.history.storeHistory("Created %s" % new_calc_node.__class__.__name__)
+
+        context_menu = self.showNodesMenu()
+
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == self.runact:
+            self.doEvalOutputs()
+
+        if action is not None:
+            new_calc_node = get_class_from_opcode(action.data())(self.scene)
+            scene_pos = self.scene.getView().mapToScene(event.pos())
+            new_calc_node.setPos(scene_pos.x(), scene_pos.y())
+            if DEBUG_CONTEXT: print("Selected node:", new_calc_node)
+
+            if self.scene.getView().mode == MODE_EDGE_DRAG:
+                # if we were dragging an edge...
+                target_socket = self.determine_target_socket_of_node(
+                    self.scene.getView().dragging.drag_start_socket.is_output, new_calc_node)
+                if target_socket is not None:
+                    self.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
+                    self.finish_new_node_state(new_calc_node)
+            else:
+                self.scene.history.storeHistory("Created %s" % new_calc_node.__class__.__name__)
+
+    def showNodesMenu(self): # this method to show all the existing nodes that we have in our editor and categorizing it
+
+        context_menu = QMenu(self)
+        keys = list(DS_NODES.keys())
+        keys.sort()
+
+        # for INPUT AND OUTPUT NODES
+        for key in keys:
+            context_menu.addAction(self.node_actions[key])
+
+        # # for INPUT AND CALCULATIONS NODES
+        # calc = QMenu(context_menu)
+        # calc.setTitle('Calculations')
+        # context_menu.addMenu(calc)
+        # for key in keys[2:6]: calc.addAction(self.node_actions[key])
+
+        # # for INPUT AND LOGIC OPERATORS NODES
+        # logic = QMenu(context_menu)
+        # logic.setTitle('Logic Operations')
+        # context_menu.addMenu(logic)
+        # for key in keys[6:8]:
+        #     logic.addAction(self.node_actions[key])
+
+        context_menu.addSeparator()
+
+        self.runact = context_menu.addAction("RUN ALL CELLS")
+
+        return context_menu
 
 
 

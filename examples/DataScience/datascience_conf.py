@@ -38,6 +38,4 @@ def get_class_from_opcode(op_code):
 
 
 # import all nodes and register them
-from examples.DataScience.input import *
-
-from examples.DataScience.show import *
+from examples.DataScience.nodes import *

@@ -1,6 +1,8 @@
+import os
+
 import pandas as pd
 
-from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel
+from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem
 
 from qtpy.QtCore import Qt
 from examples.DataScience.datascience_conf import register_node, OP_NODE_READ_CSV
@@ -13,31 +15,19 @@ class DataScienceGraphicalINPUT(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
         self.width = 210
-        self.height = 120
-        self.edge_roundness = 6
-        self.edge_padding = 0
-        self.title_horizontal_padding = 8
-        self.title_vertical_padding = 10
+        self.height = 130
 
 class DataScienceINPUTContent(AllContentWidgetFunctions):
 
     def createContentWidget(self):
-        self.lbl = QLabel("READY TO LOAD ANY CSV File", self)
+
+        self.data_frame = pd.DataFrame({})
+
+        self.lbl = QLabel("Ready to load CSV file.", self)
         self.lbl.move(10,40)
-        self.lbl.setWordWrap(True)
 
-        self.edit = QPushButton("PRESS HERE TO LOAD DATA FRAME", self)
-
-        if self.edit.clicked.connect(self.showDialog):
-            self.new_dataframe = self.showDialog()
-            print("WWWWWWWW222222222WWWWWWWWWWWWWWW")
-            print(self.new_dataframe)
-
-        print(self.new_dataframe)
-        # self.new_dataframe = self.hehe
-        print("WWWWWWWWWWWWWWWWWWWWWWW")
-
-        print(self.new_dataframe)
+        self.edit = QPushButton("Load CSV file", self)
+        self.edit.clicked.connect(self.showDialog)
 
 
     def showDialog(self):
@@ -46,31 +36,21 @@ class DataScienceINPUTContent(AllContentWidgetFunctions):
         file_dialog.setAcceptMode(QFileDialog.AcceptOpen)
 
         if file_dialog.exec_():
+
+            self.edit.hide()
             file_path = file_dialog.selectedFiles()[0]
 
-            # Read the data from the CSV file into a data frame
-            df = pd.read_csv(file_path)
-            print(df)
+            file_name = os.path.basename(file_path)
 
-            self.lbl.setText("LOADED THE CSV")
-            # return df
-            print("NOPE")
-            # self.new_dataframe2 = df
+            self.r_data_frame = pd.read_csv(file_path)
+            self.data_frame = self.r_data_frame
 
-            # print("the new dataframe value in dialog method")
-            # print(self.new_dataframe2)
-            # self.process_data(df)
+            self.lbl.setText("Successfully Loaded The CSV file.\n"+file_name)
+            self.lbl.adjustSize()
 
         else:
-            self.lbl.setText("CANT LOAD")
-
-    # def process_data(self, dataframe):
-    #     print("FIRST LINE OF THE PROCESS METHOD")
-    #     print(dataframe.shape)
-    #     print(dataframe.temperature.mean())
-    #     print(dataframe['temperature'].std())
-
-
+            self.lbl.setText("Didn't Load The CSV file.\nplease try again.")
+            self.lbl.adjustSize()
 
     def serialize(self):
         res = super().serialize()
@@ -105,30 +85,30 @@ class DataScienceNodeINPUT(DataScienceNode):
 
     def evaluationImplementation(self): # evalImplementation which is in eval which become nodeEvaluations to override the calculatorEvaluationImp of the calculator node base
 
-        # user_input = self.content.edit.text()
-        # constrainted_value = int(user_input)
-        # self.value = constrainted_value
+        if self.content.data_frame.empty:
+            self.markReady(True)
+            self.grNode.setToolTip("Please load any CSV file")
 
-        user_input = self.content.new_dataframe
-        self.value = user_input
+        else:
+            print(self.content.data_frame.shape)
+            print(self.content.data_frame.iloc[2:5, :-1])
+            print(self.content.data_frame)
+            print(self.content.data_frame.columns)
 
+            self.value = self.content.data_frame
 
-        if self.value:
             self.markReady(False)
             self.markInvalid(False)
-            self.grNode.setToolTip("")
-        else:
-            self.markInvalid()
 
+            return self.value
 
-
-        # self.markDescendantsInvalid(False)
-        # self.markDescendantsReady()
-
-        self.grNode.setToolTip("")
-
-        self.nodeChildrenEvaluation()
-
+        # # self.markDescendantsInvalid(False)
+        # # self.markDescendantsReady()
+        #
+        # self.grNode.setToolTip("")
+        #
+        # self.nodeChildrenEvaluation()
+        #
         return self.value
 
     def onInputChanged(self, socket=None):

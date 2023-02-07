@@ -76,8 +76,8 @@ class DataScienceNode(AllNodeFunctions):
             return self.value
 
         try:
-            dataframe = self.evaluationImplementation()
-            return dataframe
+            val = self.evaluationImplementation()
+            return val
 
         except ValueError as e:
             self.markInvalid()
@@ -101,8 +101,8 @@ class DataScienceNode(AllNodeFunctions):
             return None
 
         else:
-            dataframe = self.evaluationOperation(first_input.nodeEvaluation(), seconed_input.nodeEvaluation())
-            self.value = dataframe
+            val = self.evaluationOperation(first_input.nodeEvaluation(), seconed_input.nodeEvaluation())
+            self.value = val
 
             # to paint the Evaluated State with the green sign
             self.markReady(False)
@@ -110,7 +110,7 @@ class DataScienceNode(AllNodeFunctions):
 
             self.grNode.setToolTip("")
 
-            return dataframe
+            return val
 
     def evaluationOperation(self, input1, input2):  # evalOperation()
         return 0
