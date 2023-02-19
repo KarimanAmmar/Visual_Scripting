@@ -90,25 +90,24 @@ class DataScienceNodeINPUT(DataScienceNode):
             self.grNode.setToolTip("Please load any CSV file")
 
         else:
+            self.markReady(False)
+            self.markInvalid(False)
+
             print(self.content.data_frame.shape)
             print(self.content.data_frame.iloc[2:5, :-1])
             print(self.content.data_frame)
             print(self.content.data_frame.columns)
 
             self.value = self.content.data_frame
-
-            self.markReady(False)
-            self.markInvalid(False)
-
             return self.value
 
-        # # self.markDescendantsInvalid(False)
-        # # self.markDescendantsReady()
+        # self.markDescendantsInvalid(False)
+        # self.markDescendantsReady()
         #
         # self.grNode.setToolTip("")
         #
         # self.nodeChildrenEvaluation()
-        #
+
         return self.value
 
     def onInputChanged(self, socket=None):

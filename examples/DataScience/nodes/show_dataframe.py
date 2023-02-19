@@ -95,7 +95,7 @@ class DataScienceNodeOUTPUT(DataScienceNode):
             self.markReady(True)
 
     def evaluationImplementation(self):
-        self.markReady(True)
+        # self.markReady(True)
 
         input_socket = self.getInput(0)
 
@@ -115,13 +115,18 @@ class DataScienceNodeOUTPUT(DataScienceNode):
         val = self.content.df
         # self.content.df = val
         self.content.drawTable(val)
-        print("QQQQQQQQQQQQQQQQQQQQQQQQQ!!!!!!!!!!!!!!")
-        print(input_socket)
+
+        print("evaluated part ")
+
+        print(input_socket.content.data_frame)
+        self.content.drawTable(input_socket.content.data_frame)
+
+
         print(self.content.df)
         # self.content.lbl.setText(f"{val}")
-        self.markInvalid(False)
-        self.markReady(False)
-        self.grNode.setToolTip("")
+        # self.markInvalid(False)
+        # self.markReady(False)
+        # self.grNode.setToolTip("")
 
         # elif not int(val):
         #     self.content.lbl.setText(f"{val}")
