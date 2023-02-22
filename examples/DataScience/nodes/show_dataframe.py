@@ -61,45 +61,6 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
 
 
 
-    def drawTable(self,df):
-        # table_widget = QTableWidget(self)
-        # table_widget.setRowCount(dataframe.shape[0])
-        # table_widget.setColumnCount(dataframe.shape[1])
-        # table_widget.setHorizontalHeaderLabels(list(dataframe.columns))
-        # table_widget.resize(900, 1200)
-        # # table_widget.setWordWrap(True)
-        # # table_widget.showMaximized()
-        #
-        # # # Populate the table widget with data from the data frame
-        # for row in range(dataframe.shape[0]):
-        #     for col in range(dataframe.shape[1]):
-        #         item = QTableWidgetItem(str(dataframe.iloc[row, col]))
-        #         table_widget.setItem(row, col, item)
-
-        # Create QStandardItemModel
-        model = QStandardItemModel(df.shape[0], df.shape[1])
-
-        # Set horizontal header labels
-        model.setHorizontalHeaderLabels(df.columns)
-
-        # Add data to QStandardItemModel
-        for i in range(df.shape[0]):
-            for j in range(df.shape[1]):
-                item = QStandardItem(str(df.iloc[i, j]))
-                model.setItem(i, j, item)
-
-        # Create QTableView and set model
-        table = QTableView(self)
-        table.setModel(model)
-
-        # Set table properties
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
-        table.setEditTriggers(QTableView.NoEditTriggers)
-        table.setSelectionBehavior(QTableView.SelectRows)
-        table.setSelectionMode(QTableView.SingleSelection)
-
-
     def update_table(self, dataframe):
         # Read data from CSV file and create DataFrame
         df = pd.DataFrame(dataframe)
@@ -152,63 +113,35 @@ class DataScienceNodeOUTPUT(DataScienceNode):
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         if finput_port is not None:
-            self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+            # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+            self.markReady()
 
         else:
-            self.markReady(True)
+            self.markReady()
 
     def evaluationImplementation(self):
-        # self.markReady(True)
+        self.markReady()
 
         input_socket = self.getInput(0)
 
-        # val = input_socket.nodeEvaluation()
 
-        # if not input_socket:
-        #     self.grNode.setToolTip("Input is not connected")
-        #     self.markReady()
-        #     return
-        #
-        # val = input_socket.nodeEvaluation()
-        #
-        # if val is None:
-        #     self.grNode.setToolTip("Input is NaN")
-        #     self.markInvalid()
-        #     return
+        if input_socket is None:
+            self.markReady()
+            self.grNode.setToolTip("Input is not connected")
+            return
 
-        # if val:
-        # val = self.content.df
-        # self.content.df = val
+        elif input_socket.content.data_frame.empty:
+            self.markInvalid()
+            self.grNode.setToolTip("Empty Data Frame")
+            return
 
-        # print(val)
-
-        # self.content.drawTable(val)
-
-        # self.content.drawTable(val)
-
-        print("evaluated part ")
-
-        print(input_socket.content.data_frame)
-
-        dn = pd.DataFrame(input_socket.content.data_frame)
-
-        # self.content.drawTable(dn)
-
-        self.content.update_table(dn)
-
-        # print(self.content.df)
+        elif input_socket.content.data_frame is not None:
+            self.content.update_table(input_socket.content.data_frame)
+            self.grNode.setToolTip("")
+            self.markInvalid(False)
+            self.markReady(False)
+            return
 
 
-        # self.content.drawTable(self.content.df)
-        # self.content.lbl.setText(f"{val}")
-        # self.markInvalid(False)
-        # self.markReady(False)
-        # self.grNode.setToolTip("")
 
-        # elif not int(val):
-        #     self.content.lbl.setText(f"{val}")
-        #     self.markInvalid(False)
-        #     self.markReady(False)
-        #     self.grNode.setToolTip("")
 
-        # return val
