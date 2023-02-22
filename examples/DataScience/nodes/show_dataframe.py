@@ -1,5 +1,6 @@
 import pandas as pd
-from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem, QTableView, QHeaderView
 from qtpy.QtCore import Qt
 from examples.DataScience.datascience_conf import register_node, OP_NODE_SHOW_CSV
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode
@@ -23,37 +24,99 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
     def createContentWidget(self):
         self.edit = QLabel()
 
-        # file_dialog = QFileDialog()
-        # file_dialog.setNameFilter("CSV Files (*.csv)")
-        # file_dialog.setAcceptMode(QFileDialog.AcceptOpen)
+        df = pd.DataFrame({})
+
+        self.model = QStandardItemModel(df.shape[0], df.shape[1])
+
+        # Set horizontal header labels
+        self.model.setHorizontalHeaderLabels(df.columns)
+
+        # Add data to QStandardItemModel
+        for i in range(df.shape[0]):
+            for j in range(df.shape[1]):
+                item = QStandardItem(str(df.iloc[i, j]))
+                self.model.setItem(i, j, item)
+
+        # Create QTableView and set model
+        table = QTableView(self)
+        table.setModel(self.model)
+
+        # Set table properties
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        table.verticalHeader().setVisible(False)
+
+        # table.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        # table.verticalHeader().setDefaultSectionSize(50)
+
+        table.setEditTriggers(QTableView.NoEditTriggers)
+        table.setSelectionBehavior(QTableView.SelectRows)
+        table.setSelectionMode(QTableView.SingleSelection)
+
+        table.setWordWrap(True)
+        table.setShowGrid(False)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
+        table.resize(599,399)
+
+
+
+    def drawTable(self,df):
+        # table_widget = QTableWidget(self)
+        # table_widget.setRowCount(dataframe.shape[0])
+        # table_widget.setColumnCount(dataframe.shape[1])
+        # table_widget.setHorizontalHeaderLabels(list(dataframe.columns))
+        # table_widget.resize(900, 1200)
+        # # table_widget.setWordWrap(True)
+        # # table_widget.showMaximized()
         #
-        # if file_dialog.exec_():
-        #     file_path = file_dialog.selectedFiles()[0]
+        # # # Populate the table widget with data from the data frame
+        # for row in range(dataframe.shape[0]):
+        #     for col in range(dataframe.shape[1]):
+        #         item = QTableWidgetItem(str(dataframe.iloc[row, col]))
+        #         table_widget.setItem(row, col, item)
 
-        # Read the data from the CSV file into a data frame
-        # df = pd.read_csv(file_path)
+        # Create QStandardItemModel
+        model = QStandardItemModel(df.shape[0], df.shape[1])
 
-        self.df = pd.DataFrame({"a":["aa","SS"]})
-        # # Create a table widget
-        print(self.df)
+        # Set horizontal header labels
+        model.setHorizontalHeaderLabels(df.columns)
 
-        self.drawTable(self.df)
+        # Add data to QStandardItemModel
+        for i in range(df.shape[0]):
+            for j in range(df.shape[1]):
+                item = QStandardItem(str(df.iloc[i, j]))
+                model.setItem(i, j, item)
 
-    def drawTable(self,dataframe):
-        dataframe = self.df
-        table_widget = QTableWidget(self)
-        table_widget.setRowCount(dataframe.shape[0])
-        table_widget.setColumnCount(dataframe.shape[1])
-        table_widget.setHorizontalHeaderLabels(list(dataframe.columns))
-        table_widget.resize(900, 1200)
-        # table_widget.setWordWrap(True)
-        # table_widget.showMaximized()
+        # Create QTableView and set model
+        table = QTableView(self)
+        table.setModel(model)
 
-        # # Populate the table widget with data from the data frame
-        for row in range(dataframe.shape[0]):
-            for col in range(dataframe.shape[1]):
-                item = QTableWidgetItem(str(dataframe.iloc[row, col]))
-                table_widget.setItem(row, col, item)
+        # Set table properties
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        table.verticalHeader().setVisible(False)
+        table.setEditTriggers(QTableView.NoEditTriggers)
+        table.setSelectionBehavior(QTableView.SelectRows)
+        table.setSelectionMode(QTableView.SingleSelection)
+
+
+    def update_table(self, dataframe):
+        # Read data from CSV file and create DataFrame
+        df = pd.DataFrame(dataframe)
+
+        # Clear current data in model
+        self.model.clear()
+
+        # Set horizontal header labels
+        self.model.setHorizontalHeaderLabels(df.columns)
+
+        # Add data to model
+        for i in range(df.shape[0]):
+            row_items = []
+            for j in range(df.shape[1]):
+                item = QStandardItem(str(df.iloc[i, j]))
+                row_items.append(item)
+            self.model.appendRow(row_items)
 
     def serialize(self):
         res = super().serialize()
@@ -99,6 +162,8 @@ class DataScienceNodeOUTPUT(DataScienceNode):
 
         input_socket = self.getInput(0)
 
+        # val = input_socket.nodeEvaluation()
+
         # if not input_socket:
         #     self.grNode.setToolTip("Input is not connected")
         #     self.markReady()
@@ -112,17 +177,29 @@ class DataScienceNodeOUTPUT(DataScienceNode):
         #     return
 
         # if val:
-        val = self.content.df
+        # val = self.content.df
         # self.content.df = val
-        self.content.drawTable(val)
+
+        # print(val)
+
+        # self.content.drawTable(val)
+
+        # self.content.drawTable(val)
 
         print("evaluated part ")
 
         print(input_socket.content.data_frame)
-        self.content.drawTable(input_socket.content.data_frame)
+
+        dn = pd.DataFrame(input_socket.content.data_frame)
+
+        # self.content.drawTable(dn)
+
+        self.content.update_table(dn)
+
+        # print(self.content.df)
 
 
-        print(self.content.df)
+        # self.content.drawTable(self.content.df)
         # self.content.lbl.setText(f"{val}")
         # self.markInvalid(False)
         # self.markReady(False)
@@ -134,4 +211,4 @@ class DataScienceNodeOUTPUT(DataScienceNode):
         #     self.markReady(False)
         #     self.grNode.setToolTip("")
 
-        return val
+        # return val

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QComboBox, QWidgetAction
-from Qt import QtWidgets
+from PyQt5 import QtWidgets
 from qtpy.QtGui import QIcon, QPixmap
 from qtpy.QtCore import QDataStream, QIODevice, Qt
 from qtpy.QtWidgets import QAction, QGraphicsProxyWidget, QMenu

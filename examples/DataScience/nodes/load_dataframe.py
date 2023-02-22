@@ -98,7 +98,8 @@ class DataScienceNodeINPUT(DataScienceNode):
             print(self.content.data_frame)
             print(self.content.data_frame.columns)
 
-            self.value = self.content.data_frame
+            self.value_one = self.content.data_frame
+            self.value = pd.DataFrame(self.value_one)
             return self.value
 
         # self.markDescendantsInvalid(False)
