@@ -9,7 +9,7 @@ from nodeeditor.base_sockets.func_socket import LEFT_CENTER, RIGHT_CENTER
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 
-class CalcGraphicsNode(DrawGraphicalNode):
+class DataScienceGraphicalNode(DrawGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
         self.width = 160
@@ -41,20 +41,21 @@ class CalcGraphicsNode(DrawGraphicalNode):
             self.icons,
             QRectF(offset, 0, 24.0, 24.0)
         )
-class CalcContent(AllContentWidgetFunctions):
+
+class DataScienceContent(AllContentWidgetFunctions):
     def createContentWidget(self):
         lbl = QLabel(self.node.content_label, self)
         lbl.setObjectName(self.node.content_label_objname)
 
-class CalcNode(AllNodeFunctions):
+class DataScienceNode(AllNodeFunctions):
     icon = ""
     op_code = 0
     op_title = "Undefined"
     content_label = ""
     content_label_objname = "calc_node_bg"
 
-    GraphicsNode_class = CalcGraphicsNode
-    NodeContent_class = CalcContent
+    GraphicsNode_class = DataScienceGraphicalNode
+    NodeContent_class = DataScienceContent
 
     def __init__(self, scene, inputs=[4,4], outputs=[4]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
@@ -71,11 +72,10 @@ class CalcNode(AllNodeFunctions):
 
     def nodeEvaluation(self):  # eval >> which was inherted from  All Node Functions Class  = BASE NODE CLASS
         if not self.isReady() and not self.isInvalid():
-            print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
+            # print(" _> returning cached %s value:" % self.__class__.__name__, self.value)
             return self.value
 
         try:
-
             val = self.evaluationImplementation()
             return val
 
@@ -113,7 +113,7 @@ class CalcNode(AllNodeFunctions):
             return val
 
     def evaluationOperation(self, input1, input2):  # evalOperation()
-        return 123
+        return 0
 
     def onInputChanged(self, socket=None):
         # print("%s::__onInputChanged" % self.__class__.__name__)

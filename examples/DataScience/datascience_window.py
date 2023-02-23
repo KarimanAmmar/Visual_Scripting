@@ -4,16 +4,15 @@ from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsProxyWidget
 #from Qt import QtWidgets
 from PyQt5 import QtCore
-from qtpy.QtGui import QIcon, QKeySequence
-from qtpy.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
-from qtpy.QtCore import Qt, QSignalMapper
+from PyQt5.QtGui import QIcon, QKeySequence
+from PyQt5.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
+from PyQt5.QtCore import Qt, QSignalMapper
 
 from nodeeditor.base_system_properties.utils import loadStylesheets
 from nodeeditor.base_system_properties.home_window import NodeEditorWindow
-from examples.Calculator.calc_sub_window import CalculatorSubWindow
-from examples.Calculator.calc_drag_listbox import GraphicalDragListBox
-from nodeeditor.base_system_properties.utils_no_qt import dumpException, pp
-from examples.Calculator.calc_conf import CALC_NODES
+from nodeeditor.base_system_properties.utils_no_qt import *
+from examples.DataScience.datascience_sub_window import *
+from examples.DataScience.datascience_drag_listbox import *
 
 # Enabling edge validators
 from nodeeditor.base_edges.func_edge import AllEdgeFunctions
@@ -22,22 +21,20 @@ from nodeeditor.base_edges.func_edge_validators import (
     edge_cannot_connect_two_outputs_or_two_inputs,
     edge_cannot_connect_input_and_output_of_same_node
 )
+
+
 AllEdgeFunctions.registerEdgeValidator(edge_validator_debug)
 AllEdgeFunctions.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
 AllEdgeFunctions.registerEdgeValidator(edge_cannot_connect_input_and_output_of_same_node)
 
 
-# images for the dark skin
-
-
 DEBUG = False
 
 
-class CalculatorWindow(NodeEditorWindow):
-
+class DataScienceWindow(NodeEditorWindow):
     def createHomeWindow(self):
         self.name_company = 'AL-Shorouk Academy'
-        self.name_product = 'Calculator NodeEditor'
+        self.name_product = 'DataScience NodeEditor'
 
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
         loadStylesheets(
@@ -49,7 +46,7 @@ class CalculatorWindow(NodeEditorWindow):
 
         if DEBUG:
             print("Registered nodes:")
-            pp(CALC_NODES)
+            pp(DS_NODES)
 
         self.mdiArea = QMdiArea()
         self.mdiArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
@@ -80,7 +77,7 @@ class CalculatorWindow(NodeEditorWindow):
 
         self.readSettings()
 
-        self.setWindowTitle("Calculator NodeEditor Example")
+        self.setWindowTitle("DataScience NodeEditor Example")
 
     def closeEvent(self, event):
         self.mdiArea.closeAllSubWindows()
@@ -93,16 +90,22 @@ class CalculatorWindow(NodeEditorWindow):
             import sys
             sys.exit(0)
 
-
     def createActions(self):
         super().createActions()
 
-        self.actClose = QAction("Cl&ose", self, statusTip="Close the active window", triggered=self.mdiArea.closeActiveSubWindow)
-        self.actCloseAll = QAction("Close &All", self, statusTip="Close all the windows", triggered=self.mdiArea.closeAllSubWindows)
+        self.actClose = QAction("Cl&ose", self, statusTip="Close the active window",
+                                triggered=self.mdiArea.closeActiveSubWindow)
+        self.actCloseAll = QAction("Close &All", self, statusTip="Close all the windows",
+                                   triggered=self.mdiArea.closeAllSubWindows)
         self.actTile = QAction("&Tile", self, statusTip="Tile the windows", triggered=self.mdiArea.tileSubWindows)
-        self.actCascade = QAction("&Cascade", self, statusTip="Cascade the windows", triggered=self.mdiArea.cascadeSubWindows)
-        self.actNext = QAction("Ne&xt", self, shortcut=QKeySequence.NextChild, statusTip="Move the focus to the next window", triggered=self.mdiArea.activateNextSubWindow)
-        self.actPrevious = QAction("Pre&vious", self, shortcut=QKeySequence.PreviousChild, statusTip="Move the focus to the previous window", triggered=self.mdiArea.activatePreviousSubWindow)
+        self.actCascade = QAction("&Cascade", self, statusTip="Cascade the windows",
+                                  triggered=self.mdiArea.cascadeSubWindows)
+        self.actNext = QAction("Ne&xt", self, shortcut=QKeySequence.NextChild,
+                               statusTip="Move the focus to the next window",
+                               triggered=self.mdiArea.activateNextSubWindow)
+        self.actPrevious = QAction("Pre&vious", self, shortcut=QKeySequence.PreviousChild,
+                                   statusTip="Move the focus to the previous window",
+                                   triggered=self.mdiArea.activatePreviousSubWindow)
 
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
@@ -112,15 +115,16 @@ class CalculatorWindow(NodeEditorWindow):
         self.actTheme = QAction('&Original Theme', self, shortcut='Alt+1', statusTip="Change Theme",
                                 triggered=self.originTheme)
         self.actTheme2 = QAction('Dark-Gray THEME', self, shortcut='Alt+3', statusTip="Change Theme",
-                                triggered=self.darkGrayTheme)
+                                 triggered=self.darkGrayTheme)
         self.actTheme3 = QAction('Gray THEME', self, shortcut='Alt+5', statusTip="Change Theme",
-                                triggered=self.darkTheme)
+                                 triggered=self.darkTheme)
         self.actTheme4 = QAction('Light THEME', self, shortcut='Alt+2', statusTip="Change Theme",
-                                triggered=self.lightTheme)
+                                 triggered=self.lightTheme)
         self.actTheme5 = QAction('Dark-Orange THEME', self, shortcut='Alt+4', statusTip="Change Theme",
-                                triggered=self.darkOrangeTheme)
+                                 triggered=self.darkOrangeTheme)
 
-        self.actRun = QAction("Evaluate All Nodes ", self, shortcut='Ctrl+R', statusTip="RUN ALL NODES",  triggered= self.RunNodes)
+        self.actRun = QAction("Evaluate All Nodes ", self, shortcut='Ctrl+R', statusTip="RUN ALL NODES",
+                              triggered=self.RunNodes)
 
     def RunNodes(self):
         pass
@@ -149,7 +153,6 @@ class CalculatorWindow(NodeEditorWindow):
         #
         # pass
 
-
     def getCurrentNodeEditorWidget(self):
         """ we're returning NodeEditorWidget here... """
         activeSubWindow = self.mdiArea.activeSubWindow()
@@ -162,11 +165,12 @@ class CalculatorWindow(NodeEditorWindow):
             subwnd = self.createMdiChild()
             subwnd.widget().fileNew()
             subwnd.show()
-        except Exception as e: dumpException(e)
-
+        except Exception as e:
+            dumpException(e)
 
     def onFileOpen(self):
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(), self.getFileDialogFilter())
+        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open graph from file', self.getFileDialogDirectory(),
+                                                      self.getFileDialogFilter())
 
         try:
             for fname in fnames:
@@ -176,7 +180,7 @@ class CalculatorWindow(NodeEditorWindow):
                         self.mdiArea.setActiveSubWindow(existing)
                     else:
                         # we need to create new subWindow and open the file
-                        nodeeditor = CalculatorSubWindow()
+                        nodeeditor = DataScienceSubWindow()
                         if nodeeditor.fileLoad(fname):
                             self.statusBar().showMessage("File %s loaded" % fname, 5000)
                             nodeeditor.setTitle()
@@ -184,14 +188,14 @@ class CalculatorWindow(NodeEditorWindow):
                             subwnd.show()
                         else:
                             nodeeditor.close()
-        except Exception as e: dumpException(e)
-
+        except Exception as e:
+            dumpException(e)
 
     def about(self):
         QMessageBox.about(self, "About Calculator NodeEditor Example",
-                "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
-                "document interface applications using PyQt5 and NodeEditor. For more information visit: "
-                "<a href='https://www.blenderfreak.com/'>www.BlenderFreak.com</a>")
+                          "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
+                          "document interface applications using PyQt5 and NodeEditor. For more information visit: "
+                          "<a href='https://www.blenderfreak.com/'>www.BlenderFreak.com</a>")
 
     def createMenus(self):
         super().createMenus()
@@ -250,9 +254,8 @@ class CalculatorWindow(NodeEditorWindow):
 
             self.actUndo.setEnabled(hasMdiChild and active.canUndo())
             self.actRedo.setEnabled(hasMdiChild and active.canRedo())
-        except Exception as e: dumpException(e)
-
-
+        except Exception as e:
+            dumpException(e)
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
@@ -312,7 +315,7 @@ class CalculatorWindow(NodeEditorWindow):
         self.statusBar().showMessage("Ready")
 
     def createMdiChild(self, child_widget=None):
-        nodeeditor = child_widget if child_widget is not None else CalculatorSubWindow()
+        nodeeditor = child_widget if child_widget is not None else DataScienceSubWindow()
         subwnd = self.mdiArea.addSubWindow(nodeeditor)
         subwnd.setWindowIcon(self.empty_icon)
         # nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
@@ -330,26 +333,23 @@ class CalculatorWindow(NodeEditorWindow):
         else:
             event.ignore()
 
-
     def findMdiChild(self, filename):
         for window in self.mdiArea.subWindowList():
             if window.widget().filename == filename:
                 return window
         return None
 
-
     def setActiveSubWindow(self, window):
         if window:
             self.mdiArea.setActiveSubWindow(window)
 
     def darkTheme(self):
-         if self.getCurrentNodeEditorWidget():
-             self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
-             loadStylesheets(
-                 os.path.join(os.path.dirname(__file__), "qss/nodeeditor-dark.qss"),
-                 self.stylesheet_filename
-             )
-
+        if self.getCurrentNodeEditorWidget():
+            self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/nodeeditor.qss")
+            loadStylesheets(
+                os.path.join(os.path.dirname(__file__), "qss/nodeeditor-dark.qss"),
+                self.stylesheet_filename
+            )
 
     def originTheme(self):
         if self.getCurrentNodeEditorWidget():

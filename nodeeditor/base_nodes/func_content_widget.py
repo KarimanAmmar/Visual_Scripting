@@ -2,6 +2,9 @@
 """A module containing the base class for the Node's content graphical representation. It also contains an example of
 an overridden Text Widget, which can pass a notification to it's parent about being modified."""
 from collections import OrderedDict
+
+import pandas as pd
+
 from nodeeditor.base_system_properties.func_serialization import Serializable
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QTextEdit
 

@@ -398,7 +398,7 @@ class AllNodeFunctions(Serializable):
         self.markReady(False)
         self.markInvalid(False)
 
-        return 0
+        return
 
     def nodeChildrenEvaluation(self):
         """Evaluate all children of this `Node`"""

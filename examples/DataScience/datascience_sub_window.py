@@ -1,21 +1,25 @@
 from PyQt5.QtWidgets import QComboBox, QWidgetAction
-from PyQt5 import QtWidgets
+#from Qt import QtWidgets
 from qtpy.QtGui import QIcon, QPixmap
 from qtpy.QtCore import QDataStream, QIODevice, Qt
 from qtpy.QtWidgets import QAction, QGraphicsProxyWidget, QMenu
 
-from GeneralForm.nodes_configuration import CALC_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
+from examples.DataScience.datascience_conf import DS_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
 from nodeeditor.base_system_properties.home_widget import NodeEditorWidget
 from nodeeditor.base_edges.func_edge import EDGE_TYPE_DIRECT, EDGE_TYPE_BEZIER, EDGE_TYPE_SQUARE
 from nodeeditor.base_system_properties.graphical_view import MODE_EDGE_DRAG
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 from nodeeditor.base_nodes.func_node import AllNodeFunctions
 
+from examples.DataScience.datascience_drag_listbox import *
+from examples.DataScience.datascience_node_base import DataScienceNode
+
+
 DEBUG = False
 DEBUG_CONTEXT = False
 
 
-class CalculatorSubWindow(NodeEditorWidget):
+class DataScienceSubWindow(NodeEditorWidget):
     def __init__(self):
         super().__init__()
         # self.setAttribute(Qt.WA_DeleteOnClose)
@@ -65,10 +69,10 @@ class CalculatorSubWindow(NodeEditorWidget):
 
     def initNewNodeActions(self):
         self.node_actions = {}
-        keys = list(CALC_NODES.keys())
+        keys = list(DS_NODES.keys())
         keys.sort()
         for key in keys:
-            node = CALC_NODES[key]
+            node = DS_NODES[key]
             self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
             self.node_actions[node.op_code].setData(node.op_code)
 
@@ -82,6 +86,8 @@ class CalculatorSubWindow(NodeEditorWidget):
         for callback in self._close_event_listeners: callback(self, event)
 
     def onDragEnter(self, event):
+        # print("CalcSubWnd :: ~onDragEnter")
+        # print("text: '%s'" % event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             event.acceptProposedAction()
         else:
@@ -89,6 +95,8 @@ class CalculatorSubWindow(NodeEditorWidget):
             event.setAccepted(False)
 
     def onDrop(self, event):
+        # print("CalcSubWnd :: ~onDrop")
+        # print("text: '%s'" % event.mimeData().text())
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             eventData = event.mimeData().data(LISTBOX_MIMETYPE)
             dataStream = QDataStream(eventData, QIODevice.ReadOnly)
@@ -108,6 +116,9 @@ class CalculatorSubWindow(NodeEditorWidget):
                 self.scene.history.storeHistory("Created node %s" % node.__class__.__name__)
             except Exception as e:
                 dumpException(e)
+
+            event.setDropAction(Qt.MoveAction)
+            event.accept()
 
             event.setDropAction(Qt.MoveAction)
             event.accept()
@@ -224,31 +235,33 @@ class CalculatorSubWindow(NodeEditorWidget):
     def showNodesMenu(self): # this method to show all the existing nodes that we have in our editor and categorizing it
 
         context_menu = QMenu(self)
-        keys = list(CALC_NODES.keys())
+        keys = list(DS_NODES.keys())
         keys.sort()
 
         # for INPUT AND OUTPUT NODES
-        for key in keys[0:2]:
+        for key in keys:
             context_menu.addAction(self.node_actions[key])
 
-        # for INPUT AND CALCULATIONS NODES
-        calc = QMenu(context_menu)
-        calc.setTitle('Calculations')
-        context_menu.addMenu(calc)
-        for key in keys[2:6]: calc.addAction(self.node_actions[key])
+        # # for INPUT AND CALCULATIONS NODES
+        # calc = QMenu(context_menu)
+        # calc.setTitle('Calculations')
+        # context_menu.addMenu(calc)
+        # for key in keys[2:6]: calc.addAction(self.node_actions[key])
 
-        # for INPUT AND LOGIC OPERATORS NODES
-        logic = QMenu(context_menu)
-        logic.setTitle('Logic Operations')
-        context_menu.addMenu(logic)
-        for key in keys[6:9]:
-            logic.addAction(self.node_actions[key])
+        # # for INPUT AND LOGIC OPERATORS NODES
+        # logic = QMenu(context_menu)
+        # logic.setTitle('Logic Operations')
+        # context_menu.addMenu(logic)
+        # for key in keys[6:8]:
+        #     logic.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
 
         self.runact = context_menu.addAction("RUN ALL CELLS")
 
         return context_menu
+
+
 
     # helper functions
     def determine_target_socket_of_node(self, was_dragged_flag, new_calc_node):
