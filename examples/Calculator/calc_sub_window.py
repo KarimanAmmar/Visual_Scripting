@@ -241,7 +241,7 @@ class CalculatorSubWindow(NodeEditorWidget):
         logic = QMenu(context_menu)
         logic.setTitle('Logic Operations')
         context_menu.addMenu(logic)
-        for key in keys[6:8]:
+        for key in keys[6:9]:
             logic.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
