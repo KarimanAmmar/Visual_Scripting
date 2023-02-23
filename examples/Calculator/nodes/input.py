@@ -1,8 +1,8 @@
 from PyQt5.QtGui import QColor, QFont, QPen, QBrush
-from PyQt5.QtWidgets import QMessageBox,QPushButton
+from PyQt5.QtWidgets import QMessageBox
 from qtpy.QtWidgets import QLineEdit
 from qtpy.QtCore import Qt
-from GeneralForm.nodes_configuration import register_node, OP_NODE_INPUT
+from examples.Calculator.calc_conf import register_node, OP_NODE_INPUT
 from examples.Calculator.calc_node_base import CalcNode, CalcGraphicsNode
 from nodeeditor.base_nodes.func_content_widget import AllContentWidgetFunctions
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
@@ -10,7 +10,6 @@ from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 class CalcInputContent(AllContentWidgetFunctions):
     def createContentWidget(self):
-        # self.edit = QPushButton(self)
         self.edit = QLineEdit("1", self)
         self.edit.setAlignment(Qt.AlignRight)
         self.edit.setObjectName(self.node.content_label_objname)

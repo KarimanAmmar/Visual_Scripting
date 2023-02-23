@@ -4,7 +4,7 @@ from qtpy.QtGui import QIcon, QPixmap
 from qtpy.QtCore import QDataStream, QIODevice, Qt
 from qtpy.QtWidgets import QAction, QGraphicsProxyWidget, QMenu
 
-from GeneralForm.nodes_configuration import CALC_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
+from examples.Calculator.calc_conf import CALC_NODES, get_class_from_opcode, LISTBOX_MIMETYPE
 from nodeeditor.base_system_properties.home_widget import NodeEditorWidget
 from nodeeditor.base_edges.func_edge import EDGE_TYPE_DIRECT, EDGE_TYPE_BEZIER, EDGE_TYPE_SQUARE
 from nodeeditor.base_system_properties.graphical_view import MODE_EDGE_DRAG
