@@ -24,44 +24,59 @@ class DataScienceINPUTContent(AllContentWidgetFunctions):
         self.data_frame = pd.DataFrame({})
 
         self.lbl = QLabel("Ready to load CSV file.", self)
-        self.lbl.move(10,40)
+        self.lbl.move(30,60)
+        self.lbl.setStyleSheet("font: bold 13px;")
 
-        self.edit = QPushButton("Load CSV file", self)
-        self.edit.clicked.connect(self.showDialog)
+        self.button = QPushButton("Load CSV file", self)
+        self.button.clicked.connect(self.showDialog)
+        self.button.move(23, 15)
+        self.button.resize(150, 28)
+        self.button.setStyleSheet("background-color: #5885AF;"
+                                "border-radius: 10px;"
+                                "font: bold 14px;")
+                                # "padding: 6px;")
 
 
     def showDialog(self):
         file_dialog = QFileDialog()
-        file_dialog.setNameFilter("CSV Files (*.csv)")
+        file_dialog.setNameFilter("Select File (*.csv *.xlsx)")
         file_dialog.setAcceptMode(QFileDialog.AcceptOpen)
 
         if file_dialog.exec_():
 
-            self.edit.hide()
+            self.button.hide()
+
             file_path = file_dialog.selectedFiles()[0]
+
+            if file_path.endswith('.csv'):
+                self.data_frame = pd.read_csv(file_path)
+
+            if file_path.endswith('.xlsx'):
+                self.data_frame = pd.read_excel(file_path)
 
             file_name = os.path.basename(file_path)
 
-            self.r_data_frame = pd.read_csv(file_path)
-            self.data_frame = self.r_data_frame
-
-            self.lbl.setText("Successfully Loaded The CSV file.\n"+file_name)
+            self.lbl.setText("Successfully Loaded\nThe CSV file:\n\n"+file_name)
+            self.lbl.move(35,20)
+            self.lbl.setStyleSheet("font: bold 13px;")
             self.lbl.adjustSize()
 
         else:
             self.lbl.setText("Didn't Load The CSV file.\nplease try again.")
             self.lbl.adjustSize()
+            self.lbl.move(27,60)
+            self.lbl.setStyleSheet("font: bold 13px")
 
     def serialize(self):
         res = super().serialize()
-        res['value'] = self.edit.text()
+        res['value'] = self.button.text()
         return res
 
     def deserialize(self, data, hashmap={}):
         res = super().deserialize(data, hashmap)
         try:
             value = data['value']
-            self.edit.setText(value)
+            self.button.setText(value)
             return True & res
         except Exception as e:
             dumpException(e)
@@ -77,7 +92,7 @@ class DataScienceNodeINPUT(DataScienceNode):
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[3])
-        self.nodeEvaluation()  # eval() from the calculator node base
+        self.nodeEvaluation()
 
     def getInnerClasses(self):
         self.content = DataScienceINPUTContent(self)
@@ -93,21 +108,13 @@ class DataScienceNodeINPUT(DataScienceNode):
             self.markReady(False)
             self.markInvalid(False)
 
-            print(self.content.data_frame.shape)
-            print(self.content.data_frame.iloc[2:5, :-1])
-            print(self.content.data_frame)
-            print(self.content.data_frame.columns)
+            self.markDescendantsInvalid(False)
+            self.markDescendantsReady()
 
-            self.value_one = self.content.data_frame
-            self.value = pd.DataFrame(self.value_one)
+            self.grNode.setToolTip("")
+
+            self.value = self.content.data_frame
             return self.value
-
-        # self.markDescendantsInvalid(False)
-        # self.markDescendantsReady()
-        #
-        # self.grNode.setToolTip("")
-        #
-        # self.nodeChildrenEvaluation()
 
         return self.value
 

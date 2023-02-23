@@ -1,7 +1,7 @@
 import pandas as pd
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem, QTableView, QHeaderView
-from qtpy.QtCore import Qt
+from PyQt5.QtCore import Qt
 from examples.DataScience.datascience_conf import register_node, OP_NODE_SHOW_CSV
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode
 
@@ -12,8 +12,8 @@ from nodeeditor.base_system_properties.utils_no_qt import dumpException
 class DataScienceGraphicalOUTPUT(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 600
-        self.height = 400
+        self.width = 450
+        self.height = 350
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
@@ -21,45 +21,33 @@ class DataScienceGraphicalOUTPUT(DataScienceGraphicalNode):
 
 
 class DataScienceOUTPUTContent(AllContentWidgetFunctions):
+
     def createContentWidget(self):
-        self.edit = QLabel()
 
         df = pd.DataFrame({})
 
-        self.model = QStandardItemModel(df.shape[0], df.shape[1])
-
-        # Set horizontal header labels
-        self.model.setHorizontalHeaderLabels(df.columns)
-
-        # Add data to QStandardItemModel
-        for i in range(df.shape[0]):
-            for j in range(df.shape[1]):
-                item = QStandardItem(str(df.iloc[i, j]))
-                self.model.setItem(i, j, item)
+        self.table = QTableView(self)
+        self.model = QStandardItemModel()
 
         # Create QTableView and set model
-        table = QTableView(self)
-        table.setModel(self.model)
+        self.table.setModel(self.model)
 
         # Set table properties
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
+        self.model.setHorizontalHeaderLabels(df.columns)
 
-        # table.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        # table.verticalHeader().setDefaultSectionSize(50)
+        self.table.horizontalHeader().setVisible(True)
 
-        table.setEditTriggers(QTableView.NoEditTriggers)
-        table.setSelectionBehavior(QTableView.SelectRows)
-        table.setSelectionMode(QTableView.SingleSelection)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
 
-        table.setWordWrap(True)
-        table.setShowGrid(False)
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.table.setEditTriggers(QTableView.NoEditTriggers)
+        self.table.setSelectionBehavior(QTableView.SelectRows)
+        self.table.setSelectionMode(QTableView.SingleSelection)
 
-        table.resize(599,399)
+        self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-
+        self.table.resize(450,325)
 
     def update_table(self, dataframe):
         # Read data from CSV file and create DataFrame
@@ -81,14 +69,14 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
 
     def serialize(self):
         res = super().serialize()
-        res['value'] = self.edit.text()
+        # res['value'] = self.edit.text()
         return res
 
     def deserialize(self, data, hashmap={}):
         res = super().deserialize(data, hashmap)
         try:
             value = data['value']
-            self.edit.setText(value)
+            # self.edit.setText(value)
             return True & res
         except Exception as e:
             dumpException(e)
@@ -104,7 +92,7 @@ class DataScienceNodeOUTPUT(DataScienceNode):
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[3], outputs=[])
-        self.nodeEvaluation()  # eval() from the calculator node base
+        self.nodeEvaluation()
 
     def getInnerClasses(self):
         self.content = DataScienceOUTPUTContent(self)
@@ -117,13 +105,11 @@ class DataScienceNodeOUTPUT(DataScienceNode):
             self.markReady()
 
         else:
-            self.markReady()
+            self.markInvalid()
 
     def evaluationImplementation(self):
-        self.markReady()
 
         input_socket = self.getInput(0)
-
 
         if input_socket is None:
             self.markReady()
@@ -138,6 +124,7 @@ class DataScienceNodeOUTPUT(DataScienceNode):
         elif input_socket.content.data_frame is not None:
             self.content.update_table(input_socket.content.data_frame)
             self.grNode.setToolTip("")
+
             self.markInvalid(False)
             self.markReady(False)
             return
