@@ -12,8 +12,8 @@ from nodeeditor.base_system_properties.utils_no_qt import dumpException
 class DataScienceGraphicalOUTPUT(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 450
-        self.height = 350
+        self.width = 900
+        self.height = 700
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
@@ -47,7 +47,7 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.table.resize(450,325)
+        self.table.resize(900,675)
 
     def update_table(self, dataframe):
         # Read data from CSV file and create DataFrame
@@ -87,7 +87,7 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
 class DataScienceNodeOUTPUT(DataScienceNode):
     icon = "icons/out.png"
     op_code = OP_NODE_SHOW_CSV
-    op_title = "Show The Data Frame"
+    op_title = "Show Full Data Frame"
     content_label_objname = "calc_node_output"
 
     def __init__(self, scene):
@@ -116,13 +116,13 @@ class DataScienceNodeOUTPUT(DataScienceNode):
             self.grNode.setToolTip("Input is not connected")
             return
 
-        elif input_socket.content.data_frame.empty:
+        elif input_socket.value.empty:
             self.markInvalid()
             self.grNode.setToolTip("Empty Data Frame")
             return
 
-        elif input_socket.content.data_frame is not None:
-            self.content.update_table(input_socket.content.data_frame)
+        elif input_socket.value is not None:
+            self.content.update_table(input_socket.value)
             self.grNode.setToolTip("")
 
             self.markInvalid(False)

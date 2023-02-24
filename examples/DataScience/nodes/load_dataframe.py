@@ -2,9 +2,8 @@ import os
 
 import pandas as pd
 
-from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel
 
-from qtpy.QtCore import Qt
 from examples.DataScience.datascience_conf import register_node, OP_NODE_READ_CSV
 from examples.DataScience.datascience_node_base import DataScienceNode,DataScienceGraphicalNode
 

@@ -1,3 +1,4 @@
+import pandas as pd
 from qtpy.QtGui import QImage
 from qtpy.QtCore import QRectF
 from qtpy.QtWidgets import QLabel
@@ -57,7 +58,7 @@ class DataScienceNode(AllNodeFunctions):
     GraphicsNode_class = DataScienceGraphicalNode
     NodeContent_class = DataScienceContent
 
-    def __init__(self, scene, inputs=[4,4], outputs=[4]):
+    def __init__(self, scene, inputs=[3,3], outputs=[3]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
 
         self.value = None
@@ -113,7 +114,10 @@ class DataScienceNode(AllNodeFunctions):
             return val
 
     def evaluationOperation(self, input1, input2):  # evalOperation()
-        return 0
+
+        data_frame = pd.DataFrame({})
+
+        return data_frame
 
     def onInputChanged(self, socket=None):
         # print("%s::__onInputChanged" % self.__class__.__name__)

@@ -1,9 +1,5 @@
 import os
 
-from PyQt5.QtCore import QRect
-from PyQt5.QtWidgets import QPushButton, QLabel, QGraphicsProxyWidget
-#from Qt import QtWidgets
-from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import QMdiArea, QWidget, QDockWidget, QAction, QMessageBox, QFileDialog
 from PyQt5.QtCore import Qt, QSignalMapper
@@ -310,6 +306,9 @@ class DataScienceWindow(NodeEditorWindow):
         self.nodesDock.setFloating(False)
 
         self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
+
+        # if we need to show the node toolbar (docker) just make the benith line comment :)
+        self.nodesDock.hide()
 
     def createStatusBar(self):
         self.statusBar().showMessage("Ready")
