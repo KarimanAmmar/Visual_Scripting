@@ -238,25 +238,27 @@ class DataScienceSubWindow(NodeEditorWidget):
         keys = list(DS_NODES.keys())
         keys.sort()
 
-        # for INPUT AND OUTPUT NODES
-        for key in keys:
+        # for Loading node
+        for key in keys[0:1]:
             context_menu.addAction(self.node_actions[key])
 
-        # # for INPUT AND CALCULATIONS NODES
-        # calc = QMenu(context_menu)
-        # calc.setTitle('Calculations')
-        # context_menu.addMenu(calc)
-        # for key in keys[2:6]: calc.addAction(self.node_actions[key])
-
-        # # for INPUT AND LOGIC OPERATORS NODES
-        # logic = QMenu(context_menu)
-        # logic.setTitle('Logic Operations')
-        # context_menu.addMenu(logic)
-        # for key in keys[6:8]:
-        #     logic.addAction(self.node_actions[key])
+        # for Showing and Printing nodes
+        showing = QMenu(context_menu)
+        showing.setTitle('Show The Data Frame')
+        context_menu.addMenu(showing)
+        for key in keys[1:4]:
+            showing.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
 
+        # for Operations nodes
+        operations = QMenu(context_menu)
+        operations.setTitle('Operations On The Data Frame')
+        context_menu.addMenu(operations)
+        for key in keys[4:10]:
+            operations.addAction(self.node_actions[key])
+
+        context_menu.addSeparator()
         self.runact = context_menu.addAction("RUN ALL CELLS")
 
         return context_menu
