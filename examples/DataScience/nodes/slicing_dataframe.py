@@ -180,6 +180,9 @@ class DataScienceNodeSlice(DataScienceNode):
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         foutput_port = self.getOutputs(0)
+        self.content.combobox1.clear()
+        self.content.combobox2.clear()
+
 
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
@@ -196,11 +199,8 @@ class DataScienceNodeSlice(DataScienceNode):
 
         for col in dataframe.columns:
 
-            if self.content.combobox1.currentIndex() is None:
-                self.content.combobox1.addItem(col)
-                self.content.combobox2.addItem(col)
-            else:
-                return
+            self.content.combobox1.addItem(col)
+            self.content.combobox2.addItem(col)
 
 
         df_col = dataframe.columns
