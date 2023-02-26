@@ -1,15 +1,15 @@
 import pandas as pd
 
-from examples.DataScience.datascience_conf import register_node, OP_NODE_FILLINF_NANS_CSV
+from examples.DataScience.datascience_conf import register_node, OP_NODE_DROP_NANS
 from examples.DataScience.datascience_node_base import DataScienceNode
 
 
-@register_node(OP_NODE_FILLINF_NANS_CSV)
-class DataScienceNodeConcate(DataScienceNode):
+@register_node(OP_NODE_DROP_NANS)
+class DataScienceNodeDropNaNs(DataScienceNode):
     # icon = "icons/in.png"
-    op_code = OP_NODE_FILLINF_NANS_CSV
-    op_title = "Fill NaNs"
-    content_label = "FN"
+    op_code = OP_NODE_DROP_NANS
+    op_title = "Drop NaNs"
+    content_label = "DN"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
         super().__init__(scene, inputs, outputs)
@@ -33,9 +33,21 @@ class DataScienceNodeConcate(DataScienceNode):
             self.markReady(False)
             self.markInvalid(False)
 
+            self.markDescendantsInvalid(False)
+            self.markDescendantsReady()
+
             self.grNode.setToolTip("")
 
             return val
+
+    def evaluationOperation(self, input1, **kwargs):
+
+        f_dataframe = pd.DataFrame(input1)
+
+        new_df = f_dataframe.dropna()
+
+        return new_df
+
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
@@ -50,12 +62,3 @@ class DataScienceNodeConcate(DataScienceNode):
         elif finput_port and foutput_port is None:
             self.markReady()
 
-    def evaluationOperation(self, input1, **kwargs):
-
-        f_dataframe = pd.DataFrame(input1)
-
-        new_df = f_dataframe.dropna()
-
-        # new_df = f_dataframe.fillna()
-
-        return new_df
