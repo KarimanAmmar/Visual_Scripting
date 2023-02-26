@@ -1,15 +1,15 @@
 import pandas as pd
 
-from examples.DataScience.datascience_conf import register_node, OP_NODE_FILLINF_NANS_CSV
+from examples.DataScience.datascience_conf import register_node, OP_NODE_DROP_NANS
 from examples.DataScience.datascience_node_base import DataScienceNode
 
 
-@register_node(OP_NODE_FILLINF_NANS_CSV)
+@register_node(OP_NODE_DROP_NANS)
 class DataScienceNodeConcate(DataScienceNode):
     # icon = "icons/in.png"
-    op_code = OP_NODE_FILLINF_NANS_CSV
-    op_title = "Fill NaNs"
-    content_label = "FN"
+    op_code = OP_NODE_DROP_NANS
+    op_title = "Drop NaNs"
+    content_label = "DN"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
         super().__init__(scene, inputs, outputs)
@@ -56,6 +56,5 @@ class DataScienceNodeConcate(DataScienceNode):
 
         new_df = f_dataframe.dropna()
 
-        # new_df = f_dataframe.fillna()
 
         return new_df
