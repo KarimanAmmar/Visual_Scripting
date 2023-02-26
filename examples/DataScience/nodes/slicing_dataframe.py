@@ -216,7 +216,6 @@ class DataScienceNodeSlice(DataScienceNode):
 
         df_subset = dataframe.iloc[:,index1:index2 + 1]
         # df_str = df_subset.to_string()
-        print(df_subset)
 
 
         return df_subset
