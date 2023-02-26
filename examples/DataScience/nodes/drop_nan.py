@@ -5,7 +5,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode
 
 
 @register_node(OP_NODE_DROP_NANS)
-class DataScienceNodeConcate(DataScienceNode):
+class DataScienceNodeDropNaNs(DataScienceNode):
     # icon = "icons/in.png"
     op_code = OP_NODE_DROP_NANS
     op_title = "Drop NaNs"
@@ -33,9 +33,21 @@ class DataScienceNodeConcate(DataScienceNode):
             self.markReady(False)
             self.markInvalid(False)
 
+            self.markDescendantsInvalid(False)
+            self.markDescendantsReady()
+
             self.grNode.setToolTip("")
 
             return val
+
+    def evaluationOperation(self, input1, **kwargs):
+
+        f_dataframe = pd.DataFrame(input1)
+
+        new_df = f_dataframe.dropna()
+
+        return new_df
+
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
@@ -50,11 +62,3 @@ class DataScienceNodeConcate(DataScienceNode):
         elif finput_port and foutput_port is None:
             self.markReady()
 
-    def evaluationOperation(self, input1, **kwargs):
-
-        f_dataframe = pd.DataFrame(input1)
-
-        new_df = f_dataframe.dropna()
-
-
-        return new_df

@@ -1,15 +1,14 @@
 import pandas as pd
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel, QTableWidget, QTableWidgetItem, QTableView, QHeaderView
+from PyQt5.QtWidgets import QTableView, QHeaderView
 from PyQt5.QtCore import Qt
 from examples.DataScience.datascience_conf import register_node, OP_NODE_SHOW_CSV
-from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode
+from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
 
-from nodeeditor.base_nodes.func_content_widget import AllContentWidgetFunctions
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
 
-class DataScienceGraphicalOUTPUT(DataScienceGraphicalNode):
+class DataScienceGraphicalShow(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
         self.width = 900
@@ -20,7 +19,7 @@ class DataScienceGraphicalOUTPUT(DataScienceGraphicalNode):
         self.title_vertical_padding = 10
 
 
-class DataScienceOUTPUTContent(AllContentWidgetFunctions):
+class DataScienceShowContent(DataScienceContent):
 
     def createContentWidget(self):
 
@@ -84,19 +83,19 @@ class DataScienceOUTPUTContent(AllContentWidgetFunctions):
 
 
 @register_node(OP_NODE_SHOW_CSV)
-class DataScienceNodeOUTPUT(DataScienceNode):
+class DataScienceNodeShow(DataScienceNode):
     icon = "icons/out.png"
     op_code = OP_NODE_SHOW_CSV
     op_title = "Show Full Data Frame"
-    content_label_objname = "calc_node_output"
+
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[3], outputs=[])
         self.nodeEvaluation()
 
     def getInnerClasses(self):
-        self.content = DataScienceOUTPUTContent(self)
-        self.grNode = DataScienceGraphicalOUTPUT(self)
+        self.content = DataScienceShowContent(self)
+        self.grNode = DataScienceGraphicalShow(self)
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
@@ -119,6 +118,10 @@ class DataScienceNodeOUTPUT(DataScienceNode):
         elif input_socket.value.empty:
             self.markInvalid()
             self.grNode.setToolTip("Empty Data Frame")
+
+            self.markDescendantsInvalid()
+            self.markDescendantsReady(False)
+
             return
 
         elif input_socket.value is not None:
@@ -127,5 +130,9 @@ class DataScienceNodeOUTPUT(DataScienceNode):
 
             self.markInvalid(False)
             self.markReady(False)
+
+            self.markDescendantsInvalid(False)
+            self.markDescendantsReady()
+
             return
 

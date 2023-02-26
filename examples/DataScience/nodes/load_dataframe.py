@@ -5,18 +5,17 @@ import pandas as pd
 from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel
 
 from examples.DataScience.datascience_conf import register_node, OP_NODE_READ_CSV
-from examples.DataScience.datascience_node_base import DataScienceNode,DataScienceGraphicalNode
+from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
 
-from nodeeditor.base_nodes.func_content_widget import AllContentWidgetFunctions
 from nodeeditor.base_system_properties.utils_no_qt import dumpException
 
-class DataScienceGraphicalINPUT(DataScienceGraphicalNode):
+class DataScienceGraphicalLoad(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
         self.width = 210
         self.height = 130
 
-class DataScienceINPUTContent(AllContentWidgetFunctions):
+class DataScienceLoadContent(DataScienceContent):
 
     def createContentWidget(self):
 
@@ -32,8 +31,8 @@ class DataScienceINPUTContent(AllContentWidgetFunctions):
         self.button.resize(150, 28)
         self.button.setStyleSheet("background-color: #5885AF;"
                                 "border-radius: 10px;"
-                                "font: bold 14px;")
-                                # "padding: 6px;")
+                                "font: bold 14px;"
+                                "padding: 6px;")
 
 
     def showDialog(self):
@@ -83,19 +82,18 @@ class DataScienceINPUTContent(AllContentWidgetFunctions):
 
 
 @register_node(OP_NODE_READ_CSV)
-class DataScienceNodeINPUT(DataScienceNode):
+class DataScienceNodeLoad(DataScienceNode):
     icon = "icons/in.png"
     op_code = OP_NODE_READ_CSV
     op_title = "Load The Data Frame"
-    content_label_objname = "calc_node_input"
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[], outputs=[3])
         self.nodeEvaluation()
 
     def getInnerClasses(self):
-        self.content = DataScienceINPUTContent(self)
-        self.grNode = DataScienceGraphicalINPUT(self)
+        self.content = DataScienceLoadContent(self)
+        self.grNode = DataScienceGraphicalLoad(self)
 
     def evaluationImplementation(self): # evalImplementation which is in eval which become nodeEvaluations to override the calculatorEvaluationImp of the calculator node base
 
