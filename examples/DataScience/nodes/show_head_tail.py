@@ -19,7 +19,7 @@ class DataScienceShow_Tail_HeadContent(DataScienceShowContent):
 
 @register_node(OP_NODE_SHOW_HEAD_CSV)
 class DataScienceNodeShowHead(DataScienceNodeShow):
-    # icon = "icons/out.png"
+    icon = "icons/show.png"
     op_code = OP_NODE_SHOW_HEAD_CSV
     op_title = "Show The Head of Data Frame"
 

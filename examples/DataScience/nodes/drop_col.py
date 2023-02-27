@@ -45,7 +45,7 @@ class DataScienceContentDropColName(DataScienceContent):
 
 @register_node(OP_NODE_DROP_COL_BY_NAME)
 class DataScienceNodeDropColName(DataScienceNode):
-    # icon = "icons/in.png"
+    icon = "icons/drop.png"
     op_code = OP_NODE_DROP_COL_BY_NAME
     op_title = "Drop Column By Name"
     content_label = "DC"

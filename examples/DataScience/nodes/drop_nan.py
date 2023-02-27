@@ -6,7 +6,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode
 
 @register_node(OP_NODE_DROP_NANS)
 class DataScienceNodeDropNaNs(DataScienceNode):
-    # icon = "icons/in.png"
+    icon = "icons/drop.png"
     op_code = OP_NODE_DROP_NANS
     op_title = "Drop NaNs"
     content_label = "DN"

@@ -76,7 +76,7 @@ class DataScienceSlicingContent(DataScienceContent):
 
 @register_node(OP_NODE_SLICING_DATAFRAME)
 class DataScienceNodeSlice(DataScienceNode):
-    # icon = "icons/in.png"
+    icon = "icons/slicing.png"
     op_code = OP_NODE_SLICING_DATAFRAME
     op_title = "Slicing Dataframe"
     content_label = "SD"
