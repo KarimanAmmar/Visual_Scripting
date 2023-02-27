@@ -83,7 +83,7 @@ class DataScienceLoadContent(DataScienceContent):
 
 @register_node(OP_NODE_READ_CSV)
 class DataScienceNodeLoad(DataScienceNode):
-    icon = "icons/in.png"
+    icon = "icons/load.png"
     op_code = OP_NODE_READ_CSV
     op_title = "Load The Data Frame"
 

@@ -84,7 +84,7 @@ class DataScienceShowContent(DataScienceContent):
 
 @register_node(OP_NODE_SHOW_CSV)
 class DataScienceNodeShow(DataScienceNode):
-    icon = "icons/out.png"
+    icon = "icons/show.png"
     op_code = OP_NODE_SHOW_CSV
     op_title = "Show Full Data Frame"
 

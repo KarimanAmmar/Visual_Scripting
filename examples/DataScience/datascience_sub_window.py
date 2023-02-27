@@ -245,6 +245,7 @@ class DataScienceSubWindow(NodeEditorWidget):
         # for Showing and Printing nodes
         showing = QMenu(context_menu)
         showing.setTitle('Show The Data Frame')
+        showing.setIcon(QIcon("icons/show.png"))
         context_menu.addMenu(showing)
         for key in keys[1:4]:
             showing.addAction(self.node_actions[key])
@@ -254,6 +255,7 @@ class DataScienceSubWindow(NodeEditorWidget):
         # for Operations nodes
         operations = QMenu(context_menu)
         operations.setTitle('Operations On The Data Frame')
+        operations.setIcon(QIcon("icons/operations.png"))
         context_menu.addMenu(operations)
         for key in keys[4:10]:
             operations.addAction(self.node_actions[key])

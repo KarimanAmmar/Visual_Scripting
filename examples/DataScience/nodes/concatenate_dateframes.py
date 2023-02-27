@@ -6,7 +6,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode
 
 @register_node(OP_NODE_CONCATENATE_CSV)
 class DataScienceNodeConcate(DataScienceNode):
-    # icon = "icons/in.png"
+    icon = "icons/conc.png"
     op_code = OP_NODE_CONCATENATE_CSV
     op_title = "Concatenate Frames"
     content_label = "CONCATENATE"
