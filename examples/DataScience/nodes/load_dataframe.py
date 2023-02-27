@@ -1,6 +1,8 @@
 import os
 
 import pandas as pd
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QImage, QFont, QColor, QPen, QBrush
 
 from PyQt5.QtWidgets import QPushButton, QFileDialog, QLabel
 
@@ -15,7 +17,37 @@ class DataScienceGraphicalLoad(DataScienceGraphicalNode):
         self.width = 210
         self.height = 130
 
-class DataScienceLoadContent(DataScienceContent):
+
+    def drawingAssets(self):
+        # super().drawingAssets()
+
+        self.icons = QImage("icons/status_icons.png")
+
+        self._title_color = Qt.white
+        self._title_font = QFont("Ubuntu", 10)
+
+        # Outline Color
+        self._color = QColor("#ef974d")
+
+        self._color_selected = QColor("#F87217")
+        # Hover Color
+        self._color_hovered = QColor("#F87217")
+
+        self._pen_default = QPen(self._color)
+        self._pen_default.setWidthF(2.0)
+        self._pen_selected = QPen(self._color_selected)
+        self._pen_selected.setWidthF(2.0)
+        self._pen_hovered = QPen(self._color_hovered)
+        self._pen_hovered.setWidthF(3.0)
+
+        #Header Color
+        self._brush_title = QBrush(QColor("#131922"))
+
+        #Background Color
+        self._brush_background = QBrush(QColor("#1A202C"))
+
+class DataScienceINPUTContent(AllContentWidgetFunctions):
+
 
     def createContentWidget(self):
 
