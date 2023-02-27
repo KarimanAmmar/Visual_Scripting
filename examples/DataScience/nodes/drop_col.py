@@ -16,10 +16,6 @@ class DataScienceContentDropColName(DataScienceContent):
 
     def createContentWidget(self):
 
-        self.df = pd.DataFrame({})
-
-
-
         self.lbl = QLabel("Choose The Column Name", self)
         self.lbl.move(18, 20)
         self.lbl.setStyleSheet("font: bold 13px;")
@@ -32,53 +28,20 @@ class DataScienceContentDropColName(DataScienceContent):
         self.combo_box.move(30, 60)
         self.combo_box.resize(150, 28)
 
-        # self.combo_box.activated[str].connect(self.get_selected_text)
-        # self.combo_box.currentIndexChanged.connect(self.handle_combobox_change)
-
         self.combo_box.currentIndexChanged.connect(self.know_the_change)
 
-        # self.combo_box.currentTextChanged.connect(self.handle_combobox_change)
-
-        self.lbl_t = QLabel(self.combo_box.itemText(0), self)
-        self.lbl_t.move(18, 5)
-        self.lbl_t.setStyleSheet("font: bold 13px;")
-
-        # self.combo_box.setMaxVisibleItems(3)
-
-
-    def handle_combobox_change(self):
-
+    def get_combobox_changed_text(self):
         selected = self.combo_box.currentText()
-
-        self.lbl_t.setText(self.combo_box.currentText())
-
         return selected
 
-
-
     def know_the_change(self,index):
-
         old_item = self.combo_box.itemText(index - 1) if index > 0 else self.combo_box.itemText(0)
-        # old_item = self.combo_box.itemText(0)
-
         new_item = self.combo_box.currentText()
-        # print(f"Selected item changed from '{old_item}' to '{new_item}'")
 
         if old_item == new_item:
-            # print("F")
-            # print(self.combo_box.currentIndex())
             return False
         else:
-            # print("T")
-            # print(self.combo_box.currentIndex())
             return True
-
-    # def get_selected_text(self):
-    #     # get the selected item from the combo box
-    #     self.selected = self.combo_box.currentText()
-    #
-    #     return self.selected
-
 
 @register_node(OP_NODE_DROP_COL_BY_NAME)
 class DataScienceNodeDropColName(DataScienceNode):
@@ -95,7 +58,7 @@ class DataScienceNodeDropColName(DataScienceNode):
         self.grNode = DataScienceGraphicalDropColName(self)
 
     def evaluationImplementation(self):
-        # super().evaluationImplementation()
+        super().evaluationImplementation()
         first_input = self.getInput(0)
 
         if first_input is None:
@@ -112,29 +75,30 @@ class DataScienceNodeDropColName(DataScienceNode):
                 self.grNode.setToolTip("Empty Data Frame")
                 self.markInvalid(True)
 
-            # elif self.content.combo_box.currentText() != self.content.combo_box.itemText(0):
-            #     self.markReady(True)
-            #     self.grNode.setToolTip("HAHA")
-            #
-            # elif self.content.combo_box.currentText() == self.content.combo_box.itemText(0):
-            #     self.markReady(True)
-            #     self.markInvalid(False)
-            #     self.grNode.setToolTip("xa")
+                self.markDescendantsInvalid()
+                self.markDescendantsReady(False)
 
-            # elif self.content.lbl_t == self.content.combo_box.currentText():
-            # # elif not self.content.know_the_change(self.content.combo_box.currentIndex()):
-            #     self.markReady(False)
-            #     self.markInvalid(False)
-            #     self.grNode.setToolTip("")
-            #
-            #     return self.value
+                return self.value
 
-            elif self.content.lbl_t != self.content.combo_box.currentText():
-            # elif self.content.know_the_change(self.content.combo_box.currentIndex()):
+
+            elif not self.content.know_the_change(self.content.combo_box.currentIndex()):
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
+
+                return self.value
+
+            elif self.content.know_the_change(self.content.combo_box.currentIndex()):
 
                 self.markReady(False)
                 self.markInvalid(False)
                 self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
 
                 return self.value
 
@@ -153,33 +117,18 @@ class DataScienceNodeDropColName(DataScienceNode):
         else:
             pass
 
-        ep_value = self.content.handle_combobox_change()
+        chosen_col = self.content.get_combobox_changed_text()
 
-        index = dataframe.columns.get_loc(ep_value)
+        chosen_col_index = dataframe.columns.get_loc(chosen_col)
 
-        new_dataframe = dataframe.drop(dataframe.columns[index] , axis = 1)
+        new_dataframe = dataframe.drop(dataframe.columns[chosen_col_index] , axis = 1)
 
-        self.content.combo_box.currentTextChanged.connect(self.new)
+        self.content.combo_box.currentTextChanged.connect(self.onStatuesChange)
 
         return new_dataframe
 
-    def new(self):
+    def onStatuesChange(self):
         self.markReady()
-        # if self.content.combo_box.count() == 0:
-        #
-        #     self.content.combo_box.addItem(self.col_names)
-        #
-        # else:
-        #     # self.content.combo_box.clear()
-        #     self.content.combo_box.addItems(self.col_names)
-
-        # if self.content.combo_box.itemText(0) is None:
-        #     self.content.combo_box.addItems(self.col_names)
-        #
-        # elif self.content.combo_box.itemText(0) is not None:
-        #     pass
-        #     # self.content.combo_box.clear()
-        #     # self.content.combo_box.addItems(self.col_names)
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)

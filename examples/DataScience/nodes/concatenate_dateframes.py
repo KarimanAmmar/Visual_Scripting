@@ -11,6 +11,18 @@ class DataScienceNodeConcate(DataScienceNode):
     op_title = "Concatenate Frames"
     content_label = "CONCATENATE"
 
+    def evaluationOperation(self, input1, input2):
+
+        f_dataframe = pd.DataFrame(input1)
+
+        s_dataframe = pd.DataFrame(input2)
+
+        frames = [f_dataframe, s_dataframe]
+
+        result = pd.concat(frames,axis=1)
+
+        return result
+
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         sinput_port = self.getInput(1)
@@ -24,15 +36,3 @@ class DataScienceNodeConcate(DataScienceNode):
 
         elif finput_port and sinput_port and foutput_port is None:
             self.markReady()
-
-    def evaluationOperation(self, input1, input2):
-
-        f_dataframe = pd.DataFrame(input1)
-
-        s_dataframe = pd.DataFrame(input2)
-
-        frames = [f_dataframe, s_dataframe]
-
-        result = pd.concat(frames,axis=1)
-
-        return result
