@@ -5,8 +5,6 @@ from PyQt5.QtWidgets import QLabel, QPushButton, QComboBox
 
 from examples.DataScience.datascience_conf import register_node, OP_NODE_SLICING_DATAFRAME
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
-from nodeeditor.base_nodes.func_content_widget import AllContentWidgetFunctions
-
 
 class DataScienceGraphicalSlicing(DataScienceGraphicalNode):
     def nodeSizes(self):
@@ -18,87 +16,9 @@ class DataScienceGraphicalSlicing(DataScienceGraphicalNode):
         self.title_horizontal_padding = 8
         self.title_vertical_padding = 10
 
-    def drawingAssets(self):
-        # super().drawingAssets()
-
-        self.icons = QImage("icons/status_icons.png")
-
-        self._title_color = Qt.white
-        self._title_font = QFont("Ubuntu", 10)
-
-        self._color = QColor("#ef974d")
-        self._color_selected = QColor("#F87217")
-        self._color_hovered = QColor("#F87217")
-
-        self._pen_default = QPen(self._color)
-        self._pen_default.setWidthF(2.0)
-        self._pen_selected = QPen(self._color_selected)
-        self._pen_selected.setWidthF(2.0)
-        self._pen_hovered = QPen(self._color_hovered)
-        self._pen_hovered.setWidthF(3.0)
-
-        self._brush_title = QBrush(QColor("#131922"))
-        self._brush_background = QBrush(QColor("#1A202C"))
-
-    # to draw the states of each node of the calculator nodes
-    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
-        # super().paint(painter, QStyleOptionGraphicsItem, widget)
-
-        # title
-        path_title = QPainterPath()
-        path_title.setFillRule(Qt.WindingFill)
-        path_title.addRoundedRect(0, 0, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(0, self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(self.width - self.edge_roundness, self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_title)
-        painter.drawPath(path_title.simplified())
-
-
-        # content
-        path_content = QPainterPath()
-        path_content.setFillRule(Qt.WindingFill)
-        path_content.addRoundedRect(0, self.title_height, self.width, self.height - self.title_height, self.edge_roundness, self.edge_roundness)
-        path_content.addRect(0, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_content.addRect(self.width - self.edge_roundness, self.title_height, self.edge_roundness, self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_background)
-        painter.drawPath(path_content.simplified())
-
-
-        # outline
-        path_outline = QPainterPath()
-        path_outline.addRoundedRect(-1, -1, self.width+2, self.height+2, self.edge_roundness, self.edge_roundness)
-        painter.setBrush(Qt.NoBrush)
-        if self.hovered:
-            painter.setPen(self._pen_hovered)
-            painter.drawPath(path_outline.simplified())
-            painter.setPen(self._pen_default)
-            painter.drawPath(path_outline.simplified())
-        else:
-            painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
-            painter.drawPath(path_outline.simplified())
-
-
-        # to determin the hight of the picture that we will take the status from
-        offset = 24.0
-
-        if self.node.isReady(): offset = 0.0
-
-        #to detirmin the which picture we will take of the three picturs
-        if self.node.isInvalid(): offset = 48.0
-
-        painter.drawImage(
-            QRectF(-10, -10, 24.0, 24.0),
-            self.icons,
-            QRectF(offset, 0, 24.0, 24.0)
-        )
-
 class DataScienceSlicingContent(DataScienceContent):
 
     def createContentWidget(self):
-
-        self.data_frame = pd.DataFrame({})
 
         self.lbl = QLabel("Start Slicing From: ", self)
         self.lbl.move(5, 15)
@@ -115,8 +35,6 @@ class DataScienceSlicingContent(DataScienceContent):
                                 "border-radius: 10px;"
                                 "font: bold 14px;"
                                  "padding: 6px;")
-        # self.combobox1.setCurrentIndex(0)
-
 
         self.combobox2 = QComboBox(self)
         self.combobox2.move(170, 60)
@@ -125,10 +43,10 @@ class DataScienceSlicingContent(DataScienceContent):
                                 "border-radius: 10px;"
                                 "font: bold 14px;"
                                  "padding: 6px;")
-        # self.combobox2.setCurrentIndex(0)
 
-        self.combobox1.currentIndexChanged.connect(self.printSelectedColumnsCombo1)
-        self.combobox2.currentIndexChanged.connect(self.printSelectedColumnsCombo2)
+
+        self.combobox1.currentIndexChanged.connect(self.know_the_changeCombo1)
+        self.combobox2.currentIndexChanged.connect(self.know_the_changeCombo2)
 
     def printSelectedColumnsCombo1(self):
         column1 = self.combobox1.currentText()
@@ -137,6 +55,24 @@ class DataScienceSlicingContent(DataScienceContent):
     def printSelectedColumnsCombo2(self):
         column2 = self.combobox2.currentText()
         return column2
+
+    def know_the_changeCombo1(self, index):
+        old_item = self.combobox1.itemText(index - 1) if index > 0 else self.combobox1.itemText(0)
+        new_item = self.combobox1.currentText()
+
+        if old_item == new_item:
+            return False
+        else:
+            return True
+
+    def know_the_changeCombo2(self, index):
+        old_item = self.combobox2.itemText(index - 1) if index > 0 else self.combobox2.itemText(0)
+        new_item = self.combobox2.currentText()
+
+        if old_item == new_item:
+            return False
+        else:
+            return True
 
 
 
@@ -155,7 +91,7 @@ class DataScienceNodeSlice(DataScienceNode):
         self.grNode = DataScienceGraphicalSlicing(self)
 
     def evaluationImplementation(self):
-        super().evaluationImplementation()
+        # super().evaluationImplementation()
         first_input = self.getInput(0)
 
         if first_input is None:
@@ -169,20 +105,98 @@ class DataScienceNodeSlice(DataScienceNode):
             val = self.evaluationOperation(first_input.nodeEvaluation())
             self.value = val
 
-            # to paint the Evaluated State with the green sign
-            # self.markReady(False)
-            # self.markInvalid(False)
+            if val.empty:
+                self.grNode.setToolTip("Can not perform at this data frame.")
+                self.markInvalid(True)
 
-            self.grNode.setToolTip("")
+                self.markDescendantsInvalid()
+                self.markDescendantsReady(False)
 
-            return val
+                return self.value
+
+            elif self.content.know_the_changeCombo1(self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(self.content.combobox2.currentIndex()):
+
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
+
+                return self.value
+
+            elif not self.content.know_the_changeCombo1(self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(self.content.combobox2.currentIndex()):
+
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
+
+                return self.value
+
+            elif self.content.know_the_changeCombo1(self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(self.content.combobox2.currentIndex()):
+
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
+
+                return self.value
+
+            elif not self.content.know_the_changeCombo1(self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(self.content.combobox2.currentIndex()):
+
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
+
+                return self.value
+
+            return self.value
+
+    def evaluationOperation(self, input1, **kwargs):
+
+        dataframe = pd.DataFrame(input1)
+
+        self.col_names = list(dataframe.columns)
+
+        if self.content.combobox1.count() == 0:
+
+            self.content.combobox1.addItems(self.col_names)
+            self.content.combobox2.addItems(self.col_names)
+
+        else:
+            pass
+
+        chosen_col1 = self.content.printSelectedColumnsCombo1()
+        chosen_col2 = self.content.printSelectedColumnsCombo2()
+
+        index1 = dataframe.columns.get_loc(chosen_col1)
+        index2 = dataframe.columns.get_loc(chosen_col2)
+
+        df_subset = dataframe.iloc[:,index1:index2 + 1]
+
+        self.content.combobox1.currentTextChanged.connect(self.onStatuesChange)
+        self.content.combobox2.currentTextChanged.connect(self.onStatuesChange)
+
+        return df_subset
+
+    def onStatuesChange(self):
+        self.markReady()
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         foutput_port = self.getOutputs(0)
+
         self.content.combobox1.clear()
         self.content.combobox2.clear()
-
+        self.markReady()
 
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
@@ -192,30 +206,3 @@ class DataScienceNodeSlice(DataScienceNode):
 
         elif finput_port and foutput_port is None:
             self.markReady()
-
-    def evaluationOperation(self, input1, **kwargs):
-
-        dataframe = pd.DataFrame(input1)
-
-        for col in dataframe.columns:
-
-            self.content.combobox1.addItem(col)
-            self.content.combobox2.addItem(col)
-
-
-        df_col = dataframe.columns
-
-        index1 = df_col.get_loc(self.content.printSelectedColumnsCombo1())
-        index2 = df_col.get_loc(self.content.printSelectedColumnsCombo2())
-
-        print(self.content.printSelectedColumnsCombo1())
-        print(self.content.printSelectedColumnsCombo2())
-
-
-        print('selected columns: ', self.content.printSelectedColumnsCombo1(),'at index: ',index1, self.content.printSelectedColumnsCombo2(),'at index: ',index2)
-
-        df_subset = dataframe.iloc[:,index1:index2 + 1]
-        # df_str = df_subset.to_string()
-
-
-        return df_subset
