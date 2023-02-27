@@ -63,7 +63,6 @@ class DataScienceNodeDropColName(DataScienceNode):
 
         if first_input is None:
             self.markInvalid()
-            self.markDescendantsInvalid()
             self.grNode.setToolTip("Please connect all inputs")
             return None
 

@@ -1,6 +1,4 @@
 import pandas as pd
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont, QColor, QPen, QBrush, QPainterPath
 from qtpy.QtGui import QImage
 from qtpy.QtCore import QRectF
 from qtpy.QtWidgets import QLabel
@@ -23,66 +21,13 @@ class DataScienceGraphicalNode(DrawGraphicalNode):
         self.title_vertical_padding = 10
 
     def drawingAssets(self):
-        # super().drawingAssets()
+        super().drawingAssets()
 
         self.icons = QImage("icons/status_icons.png")
 
-        self._title_color = Qt.white
-        self._title_font = QFont("Ubuntu", 10)
-
-        self._color = QColor("#ef974d")
-        self._color_selected = QColor("#F87217")
-        self._color_hovered = QColor("#F87217")
-
-        self._pen_default = QPen(self._color)
-        self._pen_default.setWidthF(2.0)
-        self._pen_selected = QPen(self._color_selected)
-        self._pen_selected.setWidthF(2.0)
-        self._pen_hovered = QPen(self._color_hovered)
-        self._pen_hovered.setWidthF(3.0)
-
-        self._brush_title = QBrush(QColor("#131922"))
-        self._brush_background = QBrush(QColor("#1A202C"))
-
     # to draw the states of each node of the calculator nodes
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
-        # super().paint(painter, QStyleOptionGraphicsItem, widget)
-
-        # title
-        path_title = QPainterPath()
-        path_title.setFillRule(Qt.WindingFill)
-        path_title.addRoundedRect(0, 0, self.width, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(0, self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-        path_title.addRect(self.width - self.edge_roundness, self.title_height - self.edge_roundness, self.edge_roundness, self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_title)
-        painter.drawPath(path_title.simplified())
-
-
-        # content
-        path_content = QPainterPath()
-        path_content.setFillRule(Qt.WindingFill)
-        path_content.addRoundedRect(0, self.title_height, self.width, self.height - self.title_height, self.edge_roundness, self.edge_roundness)
-        path_content.addRect(0, self.title_height, self.edge_roundness, self.edge_roundness)
-        path_content.addRect(self.width - self.edge_roundness, self.title_height, self.edge_roundness, self.edge_roundness)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_background)
-        painter.drawPath(path_content.simplified())
-
-
-        # outline
-        path_outline = QPainterPath()
-        path_outline.addRoundedRect(-1, -1, self.width+2, self.height+2, self.edge_roundness, self.edge_roundness)
-        painter.setBrush(Qt.NoBrush)
-        if self.hovered:
-            painter.setPen(self._pen_hovered)
-            painter.drawPath(path_outline.simplified())
-            painter.setPen(self._pen_default)
-            painter.drawPath(path_outline.simplified())
-        else:
-            painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
-            painter.drawPath(path_outline.simplified())
-
+        super().paint(painter, QStyleOptionGraphicsItem, widget)
 
         # to determin the hight of the picture that we will take the status from
         offset = 24.0
