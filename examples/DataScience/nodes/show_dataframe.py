@@ -97,14 +97,6 @@ class DataScienceNodeShow(DataScienceNode):
         self.content = DataScienceShowContent(self)
         self.grNode = DataScienceGraphicalShow(self)
 
-    def onInputChanged(self, socket=None):
-        finput_port = self.getInput(0)
-        if finput_port is not None:
-            # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
-            self.markReady()
-
-        else:
-            self.markInvalid()
 
     def evaluationImplementation(self):
 
@@ -136,3 +128,11 @@ class DataScienceNodeShow(DataScienceNode):
 
             return
 
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        if finput_port is not None:
+            # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+            self.markReady()
+
+        else:
+            self.markInvalid()
