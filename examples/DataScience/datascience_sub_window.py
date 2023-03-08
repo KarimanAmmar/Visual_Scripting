@@ -257,7 +257,7 @@ class DataScienceSubWindow(NodeEditorWidget):
         operations.setTitle('Operations On The Data Frame')
         operations.setIcon(QIcon("icons/operations.png"))
         context_menu.addMenu(operations)
-        for key in keys[4:10]:
+        for key in keys[4:20]:
             operations.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
