@@ -20,13 +20,14 @@ class DataScienceShowContent(DataScienceContent):
     def createContentWidget(self):
 
         # Create checkbox widgets
-        self.checkbox1 = QCheckBox("Option 1", self)
+        self.checkbox1 = QCheckBox("Plot Histogram", self)
         self.checkbox1.setStyleSheet("QCheckBox::indicator:checked {background-color: yellow;}")
-        self.checkbox2 = QCheckBox("Option 2", self)
-        self.checkbox3 = QCheckBox("Option 3", self)
-        self.checkbox4 = QCheckBox("Option 4", self)
-        self.checkbox5 = QCheckBox("Option 5", self)
-        self.checkbox6 = QCheckBox("Option 6", self)
+        self.checkbox2 = QCheckBox("Plot Scatter", self)
+        self.checkbox3 = QCheckBox("Plot Pie Chart", self)
+        self.checkbox4 = QCheckBox("Plot Line", self)
+        self.checkbox5 = QCheckBox("Plot Vertical bar", self)
+        self.checkbox6 = QCheckBox("Plot Area", self)
+        self.checkbox7 = QCheckBox("Plot Area", self)
 
         # Create grid layout
         layout = QGridLayout()
@@ -36,6 +37,7 @@ class DataScienceShowContent(DataScienceContent):
         layout.addWidget(self.checkbox4, 1, 0)
         layout.addWidget(self.checkbox5, 1, 1)
         layout.addWidget(self.checkbox6, 1, 2)
+        layout.addWidget(self.checkbox7, 2, 0)
 
         # # Create button to retrieve selected checkboxes
         # btn = QPushButton("Get Selected Options", self)
@@ -59,6 +61,8 @@ class DataScienceShowContent(DataScienceContent):
             selected_options.append(self.checkbox5.text())
         if self.checkbox6.isChecked():
             selected_options.append(self.checkbox6.text())
+        if self.checkbox7.isChecked():
+            selected_options.append(self.checkbox7.text())
 
         return selected_options
 
@@ -119,7 +123,7 @@ class DataScienceNodeShow(DataScienceNode):
                         self.markReady()
 
                     elif value == self.content.checkbox2.text():
-                        plt.hist(dataframe.columns, rwidth=0.8, color="Black")  # by default number of bins is set to 10
+                        plt.scatter(dataframe.columns,dataframe.columns,edgecolors="Black")
                         plt.show()
                         self.content.checkbox2.setChecked(False)
                         self.markReady()
