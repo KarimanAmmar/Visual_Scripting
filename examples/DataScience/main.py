@@ -1,4 +1,6 @@
 import os, sys
+
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 sys.path.insert(0, os.path.join( os.path.dirname(__file__), "..", ".." ))
@@ -11,6 +13,7 @@ if __name__ == '__main__':
 
     # print(QStyleFactory.keys())
     app.setStyle('Fusion')
+    app.setWindowIcon(QIcon("icons/gold_logo.png"))
 
     wnd = DataScienceWindow()
     wnd.show()

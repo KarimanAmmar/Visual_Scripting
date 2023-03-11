@@ -47,7 +47,7 @@ class DataScienceContentDropColName(DataScienceContent):
 class DataScienceNodeDropColName(DataScienceNode):
     icon = "icons/drop.png"
     op_code = OP_NODE_DROP_COL_BY_NAME
-    op_title = "Drop Column By Name"
+    op_title = "Drop Column"
     content_label = "DC"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):

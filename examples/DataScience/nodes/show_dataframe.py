@@ -11,8 +11,8 @@ from nodeeditor.base_system_properties.utils_no_qt import dumpException
 class DataScienceGraphicalShow(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 900
-        self.height = 700
+        self.width = 600
+        self.height = 400
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
@@ -46,7 +46,7 @@ class DataScienceShowContent(DataScienceContent):
         self.table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.table.resize(900,675)
+        self.table.resize(600,375)
 
     def update_table(self, dataframe):
         # Read data from CSV file and create DataFrame
