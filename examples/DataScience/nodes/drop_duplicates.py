@@ -5,7 +5,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode
 
 
 @register_node(OP_NODE_DROP_DUPLICATE)
-class DataScienceNodeDescribe(DataScienceNode):
+class DataScienceNodeDropDuplicate(DataScienceNode):
 
     op_code = OP_NODE_DROP_DUPLICATE
     op_title = "Drop Duplicates"
@@ -57,4 +57,3 @@ class DataScienceNodeDescribe(DataScienceNode):
         newDataFrame = dataframe.drop_duplicates()
 
         return newDataFrame
-
