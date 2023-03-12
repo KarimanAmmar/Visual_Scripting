@@ -1,7 +1,7 @@
 import pandas as pd
 from PyQt5.QtWidgets import QLabel, QComboBox
 
-from examples.DataScience.datascience_conf import register_node, OP_NODE_DROP_COL_BY_NAME
+from examples.DataScience.datascience_conf import register_node, OP_NODE_SET_INDEX
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
 
 
@@ -34,7 +34,7 @@ class DataScienceContentDropColName(DataScienceContent):
         selected = self.combo_box.currentText()
         return selected
 
-    def know_the_change(self, index):
+    def know_the_change(self,index):
         old_item = self.combo_box.itemText(index - 1) if index > 0 else self.combo_box.itemText(0)
         new_item = self.combo_box.currentText()
 
@@ -43,13 +43,11 @@ class DataScienceContentDropColName(DataScienceContent):
         else:
             return True
 
-
-@register_node(OP_NODE_DROP_COL_BY_NAME)
+@register_node(OP_NODE_SET_INDEX)
 class DataScienceNodeDropColName(DataScienceNode):
-    icon = "icons/drop.png"
-    op_code = OP_NODE_DROP_COL_BY_NAME
-    op_title = "Drop Column By Name"
-    content_label = "DC"
+    # icon = "icons/drop.png"
+    op_code = OP_NODE_SET_INDEX
+    op_title = "Set Index By Column"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
         super().__init__(scene, inputs, outputs)
@@ -121,9 +119,10 @@ class DataScienceNodeDropColName(DataScienceNode):
 
         chosen_col_index = dataframe.columns.get_loc(chosen_col)
 
-        new_dataframe = dataframe.drop(dataframe.columns[chosen_col_index], axis=1)
+        new_dataframe = dataframe.set_index(dataframe.columns[chosen_col_index])
 
         self.content.combo_box.currentTextChanged.connect(self.onStatuesChange)
+        print(new_dataframe)
 
         return new_dataframe
 
@@ -140,10 +139,8 @@ class DataScienceNodeDropColName(DataScienceNode):
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
 
-        elif finput_port is None:
+        elif finput_port or foutput_port is None:
             self.markInvalid()
-            self.grNode.setToolTip("Connect input with dataframe")
-
 
         elif finput_port and foutput_port is None:
             self.markReady()
