@@ -66,6 +66,9 @@ class DataScienceShowContent(DataScienceContent):
                 row_items.append(item)
             self.model.appendRow(row_items)
 
+        index_as_list = df.index.astype(str).tolist()
+        self.model.setVerticalHeaderLabels(index_as_list)
+
     def serialize(self):
         res = super().serialize()
         # res['value'] = self.edit.text()
@@ -135,4 +138,3 @@ class DataScienceNodeShow(DataScienceNode):
             self.markDescendantsReady()
 
             return
-

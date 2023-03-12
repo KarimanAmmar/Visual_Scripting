@@ -34,7 +34,7 @@ class DataScienceContentDropColName(DataScienceContent):
         selected = self.combo_box.currentText()
         return selected
 
-    def know_the_change(self,index):
+    def know_the_change(self, index):
         old_item = self.combo_box.itemText(index - 1) if index > 0 else self.combo_box.itemText(0)
         new_item = self.combo_box.currentText()
 
@@ -42,6 +42,7 @@ class DataScienceContentDropColName(DataScienceContent):
             return False
         else:
             return True
+
 
 @register_node(OP_NODE_DROP_COL_BY_NAME)
 class DataScienceNodeDropColName(DataScienceNode):
@@ -120,7 +121,7 @@ class DataScienceNodeDropColName(DataScienceNode):
 
         chosen_col_index = dataframe.columns.get_loc(chosen_col)
 
-        new_dataframe = dataframe.drop(dataframe.columns[chosen_col_index] , axis = 1)
+        new_dataframe = dataframe.drop(dataframe.columns[chosen_col_index], axis=1)
 
         self.content.combo_box.currentTextChanged.connect(self.onStatuesChange)
 
@@ -139,8 +140,10 @@ class DataScienceNodeDropColName(DataScienceNode):
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
 
-        elif finput_port or foutput_port is None:
+        elif finput_port is None:
             self.markInvalid()
+            self.grNode.setToolTip("Connect input with dataframe")
+
 
         elif finput_port and foutput_port is None:
             self.markReady()
