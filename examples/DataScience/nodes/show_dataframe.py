@@ -59,11 +59,9 @@ class DataScienceShowContent(DataScienceContent):
 
         # Add data to model
         for i in range(df.shape[0]):
-            row_items = []
             for j in range(df.shape[1]):
                 item = QStandardItem(str(df.iloc[i, j]))
-                row_items.append(item)
-            self.model.appendRow(row_items)
+                self.model.setItem(i, j, item)
 
         # # set the index column as row headers
         # index_column = df.index.tolist()
