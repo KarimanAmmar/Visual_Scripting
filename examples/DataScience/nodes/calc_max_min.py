@@ -94,80 +94,69 @@ class DataScienceNodeCalcMean(DataScienceNode):
 
         if first_input is None:
             self.markInvalid()
+            self.markDescendantsInvalid()
             self.grNode.setToolTip("Please connect all inputs")
+
             return None
 
         else:
             val = self.evaluationOperation(first_input.nodeEvaluation())
             self.value = val
 
-            # if val.empty:
-            #     self.grNode.setToolTip("Empty Data Frame")
-            #     self.markInvalid(True)
-            #
-            #     self.markDescendantsInvalid()
-            #     self.markDescendantsReady(False)
-            #
-            #     return self.value
 
             if self.content.know_the_changeCombo1(
-                self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(
-                self.content.combobox2.currentIndex()):
+                    self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(
+                    self.content.combobox2.currentIndex()):
 
-                self.markInvalid()
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("")
 
-                # self.markReady(False)
-                # self.markInvalid(False)
-                # self.grNode.setToolTip("")
-                #
-                # self.markDescendantsInvalid(False)
-                # self.markDescendantsReady()
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
 
                 return self.value
 
             elif not self.content.know_the_changeCombo1(
-                self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(
-                self.content.combobox2.currentIndex()):
-                self.markInvalid()
+                    self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(
+                    self.content.combobox2.currentIndex()):
 
-                # self.markReady(False)
-                # self.markInvalid(False)
-                # self.grNode.setToolTip("")
-                #
-                # self.markDescendantsInvalid(False)
-                # self.markDescendantsReady()
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("QQQQQQ")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
 
                 return self.value
 
             elif self.content.know_the_changeCombo1(
-                self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(
-                self.content.combobox2.currentIndex()):
-                self.markInvalid()
+                    self.content.combobox1.currentIndex()) and not self.content.know_the_changeCombo2(
+                    self.content.combobox2.currentIndex()):
 
-                # self.markReady(False)
-                # self.markInvalid(False)
-                # self.grNode.setToolTip("")
-                #
-                # self.markDescendantsInvalid(False)
-                # self.markDescendantsReady()
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("SSSSS")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
 
                 return self.value
 
             elif not self.content.know_the_changeCombo1(
-                self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(
-                self.content.combobox2.currentIndex()):
-                self.markInvalid()
+                    self.content.combobox1.currentIndex()) and self.content.know_the_changeCombo2(
+                    self.content.combobox2.currentIndex()):
 
-                # self.markReady(False)
-                # self.markInvalid(False)
-                # self.grNode.setToolTip("")
-                #
-                # self.markDescendantsInvalid(False)
-                # self.markDescendantsReady()
+                self.markReady(False)
+                self.markInvalid(False)
+                self.grNode.setToolTip("FFFFFFF")
+
+                self.markDescendantsInvalid(False)
+                self.markDescendantsReady()
 
                 return self.value
 
-        return self.value
+            return self.value
 
     def evaluationOperation(self, input1, **kwargs):
 
@@ -192,11 +181,14 @@ class DataScienceNodeCalcMean(DataScienceNode):
         else:
             pass
 
-        selected_item = self.content.combobox2.currentText()
+        selected_item = self.content.printSelectedColumnsCombo2()
         if self.content.combobox1.currentText() == "Minimum":
             res = newDataFrame[selected_item].min()
         elif self.content.combobox1.currentText() == "Maximum":
             res = newDataFrame[selected_item].max()
+
+        self.content.combobox1.currentTextChanged.connect(self.onStatuesChange)
+        self.content.combobox2.currentTextChanged.connect(self.onStatuesChange)
 
         return res
 
@@ -204,17 +196,18 @@ class DataScienceNodeCalcMean(DataScienceNode):
     def onStatuesChange(self):
         self.markReady()
 
-
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         foutput_port = self.getOutputs(0)
 
+        self.content.combobox1.clear()
         self.content.combobox2.clear()
+        self.markReady()
 
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
 
-        elif finput_port or foutput_port is None:
+        elif finput_port is None:
             self.markInvalid()
 
         elif finput_port and foutput_port is None:

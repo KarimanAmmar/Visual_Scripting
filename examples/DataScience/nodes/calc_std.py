@@ -33,15 +33,13 @@ class DataScienceCalcStdContent(DataScienceContent):
                                     "font: bold 14px;"
                                     "padding: 6px;")
 
-
         self.combobox.currentIndexChanged.connect(self.know_the_change)
 
+    def get_combobox_changed_text(self):
+        selected = self.combobox.currentText()
+        return selected
 
-    def printSelectedColumnsCombo1(self):
-        column1 = self.combobox.currentText()
-        return column1
-
-    def know_the_change(self,index):
+    def know_the_change(self, index):
         old_item = self.combobox.itemText(index - 1) if index > 0 else self.combobox.itemText(0)
         new_item = self.combobox.currentText()
 
@@ -77,38 +75,37 @@ class DataScienceNodeCalcMean(DataScienceNode):
             val = self.evaluationOperation(first_input.nodeEvaluation())
             self.value = val
 
-            # if val.empty:
-            #     self.grNode.setToolTip("Empty Data Frame")
-            #     self.markInvalid(True)
-            #
-            #     self.markDescendantsInvalid()
-            #     self.markDescendantsReady(False)
-            #
-            #     return self.value
+            if first_input is None:
+                self.markInvalid()
+                self.grNode.setToolTip("Please connect all inputs")
+                return None
 
+            else:
+                val = self.evaluationOperation(first_input.nodeEvaluation())
+                self.value = val
 
-            if not self.content.know_the_change(self.content.combobox.currentIndex()):
-                self.markReady(False)
-                self.markInvalid(False)
-                self.grNode.setToolTip("")
+                if self.content.know_the_change(self.content.combobox.currentIndex()):
+                    self.markReady(False)
+                    self.markInvalid(False)
+                    self.grNode.setToolTip("QQQQQQ")
 
-                self.markDescendantsInvalid(False)
-                self.markDescendantsReady()
+                    self.markDescendantsInvalid(False)
+                    self.markDescendantsReady()
+
+                    return self.value
+
+                elif not self.content.know_the_change(self.content.combobox.currentIndex()):
+
+                    self.markReady(False)
+                    self.markInvalid(False)
+                    self.grNode.setToolTip("SSSSSSS")
+
+                    self.markDescendantsInvalid(False)
+                    self.markDescendantsReady()
+
+                    return self.value
 
                 return self.value
-
-            elif self.content.know_the_change(self.content.combobox.currentIndex()):
-
-                self.markReady(False)
-                self.markInvalid(False)
-                self.grNode.setToolTip("")
-
-                self.markDescendantsInvalid(False)
-                self.markDescendantsReady()
-
-                return self.value
-
-            return self.value
 
     def evaluationOperation(self, input1, **kwargs):
 
@@ -118,7 +115,6 @@ class DataScienceNodeCalcMean(DataScienceNode):
 
         newDataFrame = dataframe.select_dtypes(include=numerics)
 
-
         self.col_names = list(newDataFrame.columns)
 
         if self.content.combobox.count() == 0:
@@ -126,38 +122,28 @@ class DataScienceNodeCalcMean(DataScienceNode):
         else:
             pass
 
-        selected_item = self.content.combobox.currentText()
+        selected_item = self.content.get_combobox_changed_text()
         column_std = newDataFrame[selected_item].std()
+        self.content.combobox.currentTextChanged.connect(self.onStatuesChange)
         return column_std
-
-
-
-
-        # text = self.content.textbox.text()
-        #
-        # df_renamed = dataframe.rename(columns={dataframe.columns[index1]: text})
-        #
-        # self.content.combobox.currentIndexChanged.connect(self.onStatuesChange)
-        #
-        # return df_renamed
-
 
     def onStatuesChange(self):
         self.markReady()
-
 
     def onInputChanged(self, socket=None):
         finput_port = self.getInput(0)
         foutput_port = self.getOutputs(0)
 
         self.content.combobox.clear()
+        self.markReady()
 
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
 
-        elif finput_port or foutput_port is None:
+        elif finput_port is None:
             self.markInvalid()
+            self.grNode.setToolTip("Connect input with dataframe")
+
 
         elif finput_port and foutput_port is None:
             self.markReady()
-

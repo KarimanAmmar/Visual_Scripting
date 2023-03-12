@@ -21,7 +21,6 @@ OP_NODE_PRINT_OUTPUT = 20
 DS_NODES = {
 }
 
-
 class ConfException(Exception): pass
 
 
