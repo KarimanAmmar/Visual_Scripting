@@ -76,7 +76,7 @@ class DataScienceCalcMaxMinContent(DataScienceContent):
 
 
 @register_node(OP_NODE_FIND_MAX_MIN)
-class DataScienceNodeCalcMean(DataScienceNode):
+class DataScienceNodeCalcMax_Min(DataScienceNode):
     # icon = "icons/rename.png"
     op_code = OP_NODE_FIND_MAX_MIN
     op_title = "Calculating Max or Min"
