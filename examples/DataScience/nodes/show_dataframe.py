@@ -57,11 +57,13 @@ class DataScienceShowContent(DataScienceContent):
         # Set table properties
         self.model.setHorizontalHeaderLabels(df.columns)
 
-        # set the data for each cell in the model
-        for row in range(df.shape[0]):
-            for column in range(df.shape[1]):
-                item = QStandardItem(str(df.iloc[row, column]))
-                self.model.setItem(row, column, item)
+        # Add data to model
+        for i in range(df.shape[0]):
+            row_items = []
+            for j in range(df.shape[1]):
+                item = QStandardItem(str(df.iloc[i, j]))
+                row_items.append(item)
+            self.model.appendRow(row_items)
 
         # # set the index column as row headers
         # index_column = df.index.tolist()
@@ -136,3 +138,4 @@ class DataScienceNodeShow(DataScienceNode):
 
         else:
             self.markInvalid()
+
