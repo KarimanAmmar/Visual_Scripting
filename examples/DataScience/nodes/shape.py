@@ -55,8 +55,7 @@ class DataScienceNodeShape(DataScienceNode):
         rows_len = len(dataframe.index)
         col_len = str(col_len)
         rows_len = str(rows_len)
-        shape = (f"numbers of columns "+col_len+"\n numbers of row = "+col_len)
-
+        shape = (f"numbers of columns = "+col_len+"\n numbers of row = "+rows_len)
 
         return shape
 
