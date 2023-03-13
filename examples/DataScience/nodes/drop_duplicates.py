@@ -36,6 +36,13 @@ class DataScienceNodeDropDuplicate(DataScienceNode):
             self.grNode.setToolTip("")
             return val
 
+    def evaluationOperation(self, input1, **kwargs):
+
+        dataframe = pd.DataFrame(input1)
+
+        newDataFrame = dataframe.drop_duplicates()
+
+        return newDataFrame
     def onInputChanged(self, socket=None):
 
         finput_port = self.getInput(0)
@@ -50,10 +57,4 @@ class DataScienceNodeDropDuplicate(DataScienceNode):
         elif finput_port and foutput_port is None:
             self.markReady()
 
-    def evaluationOperation(self, input1, **kwargs):
 
-        dataframe = pd.DataFrame(input1)
-
-        newDataFrame = dataframe.drop_duplicates()
-
-        return newDataFrame

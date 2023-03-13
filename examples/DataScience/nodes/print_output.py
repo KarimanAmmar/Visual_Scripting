@@ -21,7 +21,7 @@ class DataScienceGraphicalCalcMean(DataScienceGraphicalNode):
 class DataScienceCalcMeanContent(DataScienceContent):
 
     def createContentWidget(self):
-        self.lbl = QLabel("                                               ", self)
+        self.lbl = QLabel(self)
         self.lbl.move(30, 10)
         self.lbl.setStyleSheet("font: bold 13px;")
 
@@ -68,26 +68,35 @@ class DataScienceNodeCalcMean(DataScienceNode):
 
             return
 
-        if int(val):
-
-            self.content.lbl.setText(f"{val}")
-
+        elif val:
+            self.content.lbl.setText(val)
+            self.content.lbl.adjustSize()
             self.markInvalid(False)
 
             self.markReady(False)
 
             self.grNode.setToolTip("")
 
-
-        elif not int(val):
-
-            self.content.lbl.setText(f"{val}")
-
-            self.markInvalid(False)
-
-            self.markReady(False)
-
-            self.grNode.setToolTip("")
+        # if int(val):
+        #
+        #     self.content.lbl.setText(f"{val}")
+        #
+        #     self.markInvalid(False)
+        #
+        #     self.markReady(False)
+        #
+        #     self.grNode.setToolTip("")
+        #
+        #
+        # elif not int(val):
+        #
+        #     self.content.lbl.setText(val)
+        #
+        #     self.markInvalid(False)
+        #
+        #     self.markReady(False)
+        #
+        #     self.grNode.setToolTip("")
 
         return val
 

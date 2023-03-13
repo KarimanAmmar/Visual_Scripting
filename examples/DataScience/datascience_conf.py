@@ -21,6 +21,8 @@ OP_NODE_GROUP_BY = 18
 OP_NODE_DESCRIBE = 19
 OP_NODE_DROP_DUPLICATE = 20
 OP_NODE_DATA_VISUALIZATION = 60
+OP_NODE_SHAPE = 56
+
 
 
 DS_NODES = {
@@ -58,3 +60,7 @@ def get_class_from_opcode(op_code):
 
 # import all nodes and register them
 from examples.DataScience.nodes import *
+
+
+def OP_NODE_DROP_SHAPE():
+    return None

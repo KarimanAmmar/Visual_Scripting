@@ -81,8 +81,8 @@ class DataScienceShowContent(DataScienceContent):
 
         # self.model.setVerticalHeaderLabels(df.index)
 
-        # index_as_list = df.index.astype(str).tolist()
-        # self.model.setVerticalHeaderLabels(index_as_list)
+        index_as_list = df.index.astype(str).tolist()
+        self.model.setVerticalHeaderLabels(index_as_list)
 
 @register_node(OP_NODE_SHOW_CSV)
 class DataScienceNodeShow(DataScienceNode):
