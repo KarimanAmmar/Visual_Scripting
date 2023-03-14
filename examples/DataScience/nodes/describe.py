@@ -21,7 +21,7 @@ class DataScienceNodeDescribe(DataScienceNode):
       This class is registered as a node using the @register_node(OP_NODE_DESCRIBE) decorator.
       The describe() function of pandas.DataFrame is used to generate a new dataframe that contains various summary statistics of the input dataframe.
       """
-    # icon = "icons/in.png"
+    icon = "icons/describe.png"
     op_code = OP_NODE_DESCRIBE
     op_title = "Describe"
     content_label = "Describe"

@@ -48,7 +48,6 @@ class DataScienceContentSortDf(DataScienceContent):
 @register_node(OP_NODE_SORT_DF)
 class DataScienceNodeSortDf(DataScienceNode):
     icon = "icons/sort.png"
-
     op_code = OP_NODE_SORT_DF
     op_title = "Sort DataFrame"
     content_label = "SD"

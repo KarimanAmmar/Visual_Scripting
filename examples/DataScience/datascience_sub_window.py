@@ -254,7 +254,7 @@ class DataScienceSubWindow(NodeEditorWidget):
 
         stats = QMenu(context_menu)
         stats.setTitle('Statistics Of The Data Frame')
-        stats.setIcon(QIcon(""))
+        stats.setIcon(QIcon("icons/stat.png"))
         context_menu.addMenu(stats)
         for key in keys[5:9]:
             stats.addAction(self.node_actions[key])
@@ -273,7 +273,7 @@ class DataScienceSubWindow(NodeEditorWidget):
 
         visualization = QMenu(context_menu)
         visualization.setTitle("Visualize The Data Frame")
-        visualization.setIcon(QIcon(""))
+        visualization.setIcon(QIcon("icons/visualization.png"))
         context_menu.addMenu(visualization)
 
         for key in keys[59:60]:

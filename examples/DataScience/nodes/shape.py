@@ -9,7 +9,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode, DataScie
 
 @register_node(OP_NODE_SHAPE)
 class DataScienceNodeShape(DataScienceNode):
-    icon = "icons/drop.png"
+    icon = "icons/describe.png"
     op_code = OP_NODE_SHAPE
     op_title = "Shape"
     content_label = "SH"

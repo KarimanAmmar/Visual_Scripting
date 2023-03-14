@@ -200,7 +200,7 @@ class DataScienceNodeDropNode(DataScienceNode):
 
     """
 
-
+    icon = "icons/drop.png"
     op_code = OP_NODE_DROP_ROW
     op_title = "Drop Row"
     content_label = "DR"

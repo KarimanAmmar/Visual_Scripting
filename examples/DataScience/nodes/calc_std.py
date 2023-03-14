@@ -51,7 +51,7 @@ class DataScienceCalcStdContent(DataScienceContent):
 
 @register_node(OP_NODE_CALC_STD)
 class DataScienceNodeCalcMean(DataScienceNode):
-    # icon = "icons/rename.png"
+    icon = "icons/calculator.png"
     op_code = OP_NODE_CALC_STD
     op_title = "Calculating StandardDeviation"
 

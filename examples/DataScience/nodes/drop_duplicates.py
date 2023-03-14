@@ -6,7 +6,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode
 
 @register_node(OP_NODE_DROP_DUPLICATE)
 class DataScienceNodeDropDuplicate(DataScienceNode):
-
+    icon = "icons/drop.png"
     op_code = OP_NODE_DROP_DUPLICATE
     op_title = "Drop Duplicates"
     content_label = "Drop Duplicates"

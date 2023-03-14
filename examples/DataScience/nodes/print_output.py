@@ -28,7 +28,7 @@ class DataScienceCalcMeanContent(DataScienceContent):
 
 @register_node(OP_NODE_PRINT_OUTPUT)
 class DataScienceNodeCalcMean(DataScienceNode):
-    # icon = "icons/rename.png"
+    icon = "icons/show.png"
     op_code = OP_NODE_PRINT_OUTPUT
     op_title = "Showing Output"
 

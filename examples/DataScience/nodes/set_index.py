@@ -45,7 +45,7 @@ class DataScienceContentDropColName(DataScienceContent):
 
 @register_node(OP_NODE_SET_INDEX)
 class DataScienceNodeDropColName(DataScienceNode):
-    # icon = "icons/drop.png"
+    icon = "icons/set.png"
     op_code = OP_NODE_SET_INDEX
     op_title = "Set Index By Column"
 

@@ -52,7 +52,7 @@ class DataScienceCalcMeanContent(DataScienceContent):
 
 @register_node(OP_NODE_CALC_MEAN)
 class DataScienceNodeCalcMean(DataScienceNode):
-    # icon = "icons/rename.png"
+    icon = "icons/calculator.png"
     op_code = OP_NODE_CALC_MEAN
     op_title = "Calculating Mean"
 
