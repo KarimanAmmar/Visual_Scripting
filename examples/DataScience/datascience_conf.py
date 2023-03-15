@@ -20,8 +20,15 @@ OP_NODE_SET_INDEX = 17
 OP_NODE_GROUP_BY = 18
 OP_NODE_DESCRIBE = 19
 OP_NODE_DROP_DUPLICATE = 20
+OP_NODE_MELT = 21
+OP_NODE_PIVOT = 22
+OP_NODE_PIVOT_BY_VALUE = 23
+OP_NODE_FILTER = 24
+OP_NODE_CROSS_TAB = 25
+
+
 OP_NODE_DATA_VISUALIZATION = 60
-OP_NODE_SHAPE = 56
+
 
 
 
@@ -60,7 +67,3 @@ def get_class_from_opcode(op_code):
 
 # import all nodes and register them
 from examples.DataScience.nodes import *
-
-
-def OP_NODE_DROP_SHAPE():
-    return None

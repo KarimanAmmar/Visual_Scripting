@@ -3,11 +3,11 @@ from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtGui import QImage, QFont, QColor, QPen, QBrush, QPainterPath
 from PyQt5.QtWidgets import QLabel, QPushButton, QComboBox, QLineEdit
 
-from examples.DataScience.datascience_conf import register_node, OP_NODE_RENAME_COL
+from examples.DataScience.datascience_conf import register_node, OP_NODE_FILTER
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
 
 
-class DataScienceGraphicalRename(DataScienceGraphicalNode):
+class DataScienceGraphicalFilter(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
         self.width = 210
@@ -18,7 +18,7 @@ class DataScienceGraphicalRename(DataScienceGraphicalNode):
         self.title_vertical_padding = 10
 
 
-class DataScienceRenameContent(DataScienceContent):
+class DataScienceFilterContent(DataScienceContent):
 
     def createContentWidget(self):
         self.lbl = QLabel("Choose Column: ", self)
@@ -33,20 +33,19 @@ class DataScienceRenameContent(DataScienceContent):
                                     "font: bold 14px;"
                                     "padding: 6px;")
 
-        self.lbl = QLabel("Rename column by: ", self)
+        self.lbl = QLabel("Enter value : ", self)
         self.lbl.move(30, 80)
         self.lbl.setStyleSheet("font: bold 13px;")
 
         self.textbox = QLineEdit(self)
         self.textbox.move(25, 105)
         self.textbox.resize(150, 28)
-        self.textbox.setPlaceholderText("Type new name here")
+        self.textbox.setPlaceholderText("Variable")
         self.textbox.setStyleSheet(
                                     "background-color: #5885AF;"
                                     "border-radius: 10px;"
                                     "font: 12px;"
                                     "padding: 6px;")
-
 
 
 
@@ -67,22 +66,24 @@ class DataScienceRenameContent(DataScienceContent):
             return True
 
 
-@register_node(OP_NODE_RENAME_COL)
-class DataScienceNodeRename(DataScienceNode):
+@register_node(OP_NODE_FILTER)
+class DataScienceNodeMelt(DataScienceNode):
     icon = "icons/rename.png"
-    op_code = OP_NODE_RENAME_COL
-    op_title = "Rename Column"
+    op_code = OP_NODE_FILTER
+    op_title = "Filter"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
         super().__init__(scene, inputs, outputs)
 
     def getInnerClasses(self):
-        self.content = DataScienceRenameContent(self)
-        self.grNode = DataScienceGraphicalRename(self)
+        self.content = DataScienceFilterContent(self)
+        self.grNode = DataScienceGraphicalFilter(self)
 
     def evaluationImplementation(self):
         first_input = self.getInput(0)
         text = self.content.textbox.text()
+
+
 
 
         if first_input is None:
@@ -138,15 +139,19 @@ class DataScienceNodeRename(DataScienceNode):
 
         chosen_col = self.content.printSelectedColumnsCombo1()
 
-        index1 = dataframe.columns.get_loc(chosen_col)
+        chosen_col_index = dataframe.columns.get_loc(chosen_col)
 
         text = self.content.textbox.text()
 
-        df_renamed = dataframe.rename(columns={dataframe.columns[index1]: text})
+
+        df_Filtered = dataframe[ dataframe[dataframe.columns[chosen_col_index]] == text]
+
 
         self.content.combobox.currentIndexChanged.connect(self.onStatuesChange)
 
-        return df_renamed
+        print(df_Filtered)
+
+        return df_Filtered
 
 
     def onStatuesChange(self):
@@ -158,6 +163,8 @@ class DataScienceNodeRename(DataScienceNode):
         foutput_port = self.getOutputs(0)
 
         self.content.combobox.clear()
+
+        self.content.textbox.clear()
 
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
