@@ -47,6 +47,9 @@ class DataScienceRenameContent(DataScienceContent):
                                     "font: 12px;"
                                     "padding: 6px;")
 
+
+
+
         self.combobox.currentIndexChanged.connect(self.know_the_change)
 
 
