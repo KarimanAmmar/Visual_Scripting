@@ -28,6 +28,7 @@ def register_node_now(op_code, class_reference):
     CALC_NODES[op_code] = class_reference
 
 
+
 def register_node(op_code):
     def decorator(original_class):
         register_node_now(op_code, original_class)
