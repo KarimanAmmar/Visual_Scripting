@@ -33,7 +33,7 @@ class DataScienceMeltContent(DataScienceContent):
                                     "font: bold 14px;"
                                     "padding: 6px;")
 
-        self.lbl = QLabel("Rename Variable Colume : ", self)
+        self.lbl = QLabel("Rename Variable Column : ", self)
         self.lbl.move(30, 80)
         self.lbl.setStyleSheet("font: bold 13px;")
 
@@ -47,7 +47,7 @@ class DataScienceMeltContent(DataScienceContent):
                                     "font: 12px;"
                                     "padding: 6px;")
 
-        self.lbl = QLabel("Rename Value Colume : ", self)
+        self.lbl = QLabel("Rename Value Column : ", self)
         self.lbl.move(30, 150)
         self.lbl.setStyleSheet("font: bold 13px;")
 
@@ -60,6 +60,7 @@ class DataScienceMeltContent(DataScienceContent):
             "border-radius: 10px;"
             "font: 12px;"
             "padding: 6px;")
+
 
         self.combobox.currentIndexChanged.connect(self.know_the_change)
 
@@ -79,7 +80,7 @@ class DataScienceMeltContent(DataScienceContent):
 
 
 @register_node(OP_NODE_MELT)
-class DataScienceNodeRename(DataScienceNode):
+class DataScienceNodeMelt(DataScienceNode):
     icon = "icons/rename.png"
     op_code = OP_NODE_MELT
     op_title = "Melt"
@@ -94,6 +95,8 @@ class DataScienceNodeRename(DataScienceNode):
     def evaluationImplementation(self):
         first_input = self.getInput(0)
         text = self.content.textbox.text()
+
+        text2 = self.content.textbox2.text()
 
 
         if first_input is None:
@@ -114,7 +117,7 @@ class DataScienceNodeRename(DataScienceNode):
 
                 return self.value
 
-            elif not self.content.know_the_change(self.content.combobox.currentIndex()) and text:
+            elif not self.content.know_the_change(self.content.combobox.currentIndex()) and text and text2:
                 self.markReady(False)
                 self.markInvalid(False)
                 self.grNode.setToolTip("")
@@ -124,7 +127,7 @@ class DataScienceNodeRename(DataScienceNode):
 
                 return self.value
 
-            elif self.content.know_the_change(self.content.combobox.currentIndex()) and text:
+            elif self.content.know_the_change(self.content.combobox.currentIndex()) and text and text2:
                 self.markReady(False)
                 self.markInvalid(False)
                 self.grNode.setToolTip("")
