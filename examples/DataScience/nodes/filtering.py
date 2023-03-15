@@ -164,6 +164,8 @@ class DataScienceNodeMelt(DataScienceNode):
 
         self.content.combobox.clear()
 
+        self.content.textbox.clear()
+
         if finput_port and foutput_port is not None:
             self.nodeEvaluation()
 
