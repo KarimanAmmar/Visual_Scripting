@@ -18,7 +18,7 @@ class DataSciencePivotContent(DataScienceContent):
 
     def createContentWidget(self):
 
-        self.lbl = QLabel("Choose Column: ", self)
+        self.lbl = QLabel("Choose Index : ", self)
         self.lbl.move(30, 10)
         self.lbl.setStyleSheet("font: bold 13px;")
 
@@ -30,7 +30,7 @@ class DataSciencePivotContent(DataScienceContent):
                                     "font: bold 14px;"
                                     "padding: 6px;")
 
-        self.lbl = QLabel("Rename Variable Column : ", self)
+        self.lbl = QLabel("Choose Column : ", self)
         self.lbl.move(30, 80)
         self.lbl.setStyleSheet("font: bold 13px;")
 
@@ -44,7 +44,7 @@ class DataSciencePivotContent(DataScienceContent):
                                         "padding: 6px;")
 
 
-        self.lbl = QLabel("Rename Value Column : ", self)
+        self.lbl = QLabel("Choose Value : ", self)
         self.lbl.move(30, 150)
         self.lbl.setStyleSheet("font: bold 13px;")
 
