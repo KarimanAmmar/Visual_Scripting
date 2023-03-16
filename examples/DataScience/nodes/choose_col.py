@@ -8,43 +8,35 @@ from examples.DataScience.datascience_conf import register_node, OP_NODE_CHOOSE_
 from examples.DataScience.datascience_node_base import DataScienceNode, DataScienceGraphicalNode, DataScienceContent
 
 
-# Class To Make Combobx Checkable
 class CheckableComboBox(QComboBox):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(CheckableComboBox, self).__init__(parent)
+        self.view().pressed.connect(self.handle_item_pressed)
         self._changed = False
+        self._items = []
 
-        self.view().pressed.connect(self.handleItemPressed)
 
-#Method to make combobox checkable
-    def setItemChecked(self, index, checked=False):
-        item = self.model().item(index, self.modelColumn())  # QStandardItem object
-
-        if checked:
-            item.setCheckState(Qt.Checked)
-        else:
-            item.setCheckState(Qt.Unchecked)
-
-#Method to make multiple check in combobox
-    def handleItemPressed(self, index):
+    def handle_item_pressed(self, index):
         item = self.model().itemFromIndex(index)
-
-        if item.checkState() == Qt.Checked:
-            item.setCheckState(Qt.Unchecked)
+        if item.checkState() == 2:
+            item.setCheckState(0)
+            self._items.remove(item.text())
         else:
-            item.setCheckState(Qt.Checked)
+            item.setCheckState(2)
+            self._items.append(item.text())
         self._changed = True
 
-#Method to make the dropdown list always open
+
     def hidePopup(self):
         if not self._changed:
             super().hidePopup()
         self._changed = False
 
+    def items(self):
+        return self._items
 
-    def itemChecked(self, index):
-        item = self.model().item(index, self.modelColumn())
-        return item.checkState() == Qt.Checked
+    def selected_indices(self, df):
+        return [df.columns.get_loc(item) for item in self._items]
 
 class DataScienceGraphicalChooseCol(DataScienceGraphicalNode):
     def nodeSizes(self):
@@ -75,30 +67,18 @@ class DataScienceContentChooseCol(DataScienceContent):
         self.combo_box.resize(150, 28)
 
         self.combo_box.currentIndexChanged.connect(self.know_the_change)
+        self.combo_box.currentIndexChanged.connect(self.selectionchange)
 
         self.setLayout(mainLayout)
 
-        self.combo_box.currentIndexChanged.connect(self.selectionchange)
 
-        self.checked_items = []
+
 
     def selectionchange(self):
-        current_index = self.combo_box.currentIndex()
-        current_text = self.combo_box.currentText()
+        if self.combo_box._changed:
+            print(self.combo_box.items())
+            self.combo_box._changed = False
 
-        if self.combo_box.itemChecked(current_index):
-            self.checked_items.append(current_text)
-        elif current_text in self.checked_items:
-            self.checked_items.remove(current_text)
-
-        print("Checked items:", self.checked_items)
-        return self.checked_items
-
-
-
-        # for i in range(self.combo_box.count()):
-        #     print('Index: {0} is checked {1}'.format(i, self.combo_box.itemChecked(i)))
-        # print("////////////////////////////////////////////////")
 
     def get_combobox_changed_text(self):
         selected = self.combo_box.currentText()
@@ -115,9 +95,9 @@ class DataScienceContentChooseCol(DataScienceContent):
 
 @register_node(OP_NODE_CHOOSE_COL)
 class DataScienceNodeChooseCol(DataScienceNode):
-    # icon = "icons/drop.png"
+    icon = "icons/c.png"
     op_code = OP_NODE_CHOOSE_COL
-    op_title = "Choose Column"
+    op_title = "Show Specific Columns"
     content_label = "CC"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
@@ -187,13 +167,9 @@ class DataScienceNodeChooseCol(DataScienceNode):
         else:
             pass
 
-        for i in range(self.content.combo_box.count()):
-            self.content.combo_box.setItemChecked(i,False)
 
-        chosen_cols = self.content.selectionchange()
-        # index = [dataframe.columns.get_loc(col_name) for col_name in chosen_cols]
-        selected_df = dataframe.loc[:, chosen_cols]
-        # print(index)
+        chosen_cols = self.content.combo_box.selected_indices(dataframe)
+        selected_df = dataframe.iloc[:,chosen_cols]
 
 
         return selected_df
