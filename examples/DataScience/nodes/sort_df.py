@@ -1,5 +1,5 @@
 import pandas as pd
-from PyQt5.QtWidgets import QLabel, QComboBox
+from PyQt5.QtWidgets import QLabel, QComboBox, QCheckBox, QWidget
 from pandas.core.interchange import dataframe
 
 from examples.DataScience.datascience_conf import register_node, OP_NODE_SORT_DF
@@ -9,17 +9,31 @@ from examples.DataScience.datascience_node_base import DataScienceNode, DataScie
 class DataScienceGraphicalSortDf(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 210
-        self.height = 130
+        self.width = 350
+        self.height = 250
 
 
 class DataScienceContentSortDf(DataScienceContent):
+
+    def __init__(self, node: 'Node', parent: QWidget = None):
+        super().__init__(node, parent)
+        self.know_the_changeCombo = None
 
     def createContentWidget(self):
 
         self.lbl = QLabel("Choose The Column Name", self)
         self.lbl.move(18, 20)
         self.lbl.setStyleSheet("font: bold 13px;")
+        self.checkbox = QCheckBox('check', self)
+        self.checkbox.move(25, 150)
+        self.checkbox.resize(150, 28)
+        self.checkbox.setStyleSheet(
+
+            "background-color: #5885AF;"
+            "border-radius: 10px;"
+            "font: 12px;"
+            "padding: 6px;"
+        )
 
         self.combo_box = QComboBox(self)
         self.combo_box.setStyleSheet("background-color: #5885AF;"
@@ -30,6 +44,8 @@ class DataScienceContentSortDf(DataScienceContent):
         self.combo_box.resize(150, 28)
 
         self.combo_box.currentIndexChanged.connect(self.know_the_change)
+
+
 
     def printSelectedColumnsCombo1(self):
         column1 = self.combo_box.currentText()
@@ -43,6 +59,8 @@ class DataScienceContentSortDf(DataScienceContent):
             return False
         else:
             return True
+   # def know_the_changeCheck1(self, index):
+        #pass
 
 
 @register_node(OP_NODE_SORT_DF)
@@ -119,11 +137,24 @@ class DataScienceNodeSortDf(DataScienceNode):
             pass
 
         chosen_col = self.content.printSelectedColumnsCombo1()
-        df = dataframe.sort_values(by=chosen_col, ascending=True)
+      ##  df = dataframe.sort_values(by=chosen_col, ascending=True)
+        ##df = dataframe.sort_values(by=chosen_col, ascending=false)
 
+
+        if self.content.checkbox.isChecked():
+
+            sorting_df= dataframe.sort_values(by=chosen_col, ascending=False)
+            print(sorting_df)
+
+        else:
+            sorting_df= dataframe.sort_values(by=chosen_col, ascending=True)
+            print(sorting_df)
         self.content.combo_box.currentTextChanged.connect(self.onStatuesChange)
+        self.content.checkbox.stateChanged.connect(self.onStatuesChange)
 
-        return df
+
+
+        return sorting_df
 
         # Sorting by a Column in Ascending Order
 
