@@ -12,8 +12,8 @@ class DataScienceGraphicalShow(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
 
-        self.width = 700
-        self.height = 500
+        self.width = 600
+        self.height = 400
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
