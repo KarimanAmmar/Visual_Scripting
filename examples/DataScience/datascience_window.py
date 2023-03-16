@@ -38,7 +38,7 @@ class DataScienceWindow(NodeEditorWindow):
             self.stylesheet_filename
         )
 
-        self.empty_icon = QIcon(".")
+        self.empty_icon = QIcon("icons/white_logo.png")
 
         if DEBUG:
             print("Registered nodes:")
@@ -106,7 +106,7 @@ class DataScienceWindow(NodeEditorWindow):
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
 
-        self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
+        # self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
 
         self.actTheme = QAction('&Original Theme', self, shortcut='Alt+1', statusTip="Change Theme",
                                 triggered=self.originTheme)
@@ -187,11 +187,11 @@ class DataScienceWindow(NodeEditorWindow):
         except Exception as e:
             dumpException(e)
 
-    def about(self):
-        QMessageBox.about(self, "About Calculator NodeEditor Example",
-                          "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
-                          "document interface applications using PyQt5 and NodeEditor. For more information visit: "
-                          "<a href='https://www.blenderfreak.com/'>www.BlenderFreak.com</a>")
+    # def about(self):
+    #     QMessageBox.about(self, "About Calculator NodeEditor Example",
+    #                       "The <b>Calculator NodeEditor</b> example demonstrates how to write multiple "
+    #                       "document interface applications using PyQt5 and NodeEditor. For more information visit: "
+    #                       "<a href='https://www.blenderfreak.com/'>www.BlenderFreak.com</a>")
 
     def createMenus(self):
         super().createMenus()
@@ -203,8 +203,8 @@ class DataScienceWindow(NodeEditorWindow):
 
         self.menuBar().addSeparator()
 
-        self.helpMenu = self.menuBar().addMenu("&Help")
-        self.helpMenu.addAction(self.actAbout)
+        # self.helpMenu = self.menuBar().addMenu("&Help")
+        # self.helpMenu.addAction(self.actAbout)
 
         self.editMenu.aboutToShow.connect(self.updateEditMenu)
 

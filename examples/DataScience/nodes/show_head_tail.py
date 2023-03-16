@@ -5,14 +5,14 @@ from examples.DataScience.nodes.show_dataframe import DataScienceNodeShow, DataS
 class DataScienceGraphicalShow_Tail_Head(DataScienceGraphicalShow):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 900
+        self.width = 600
         self.height = 250
 
 class DataScienceShow_Tail_HeadContent(DataScienceShowContent):
 
     def createContentWidget(self):
         super().createContentWidget()
-        self.table.resize(900,224)
+        self.table.resize(600,225)
 
     def update_table(self, dataframe):
         super().update_table(dataframe)
