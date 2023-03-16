@@ -11,7 +11,7 @@ from examples.DataScience.datascience_node_base import DataScienceNode, DataScie
 class DataScienceNodeShape(DataScienceNode):
     icon = "icons/describe.png"
     op_code = OP_NODE_SHAPE
-    op_title = "Shape"
+    op_title = "Shape and Nans"
     content_label = "SH"
 
     def __init__(self, scene, inputs=[3], outputs=[3]):
@@ -55,7 +55,18 @@ class DataScienceNodeShape(DataScienceNode):
         rows_len = len(dataframe.index)
         col_len = str(col_len)
         rows_len = str(rows_len)
-        shape = (f"numbers of columns = "+col_len+"\n numbers of row = "+rows_len)
+
+        num_nans = dataframe.isna().sum().sum()
+        pct_nans = round(num_nans / (dataframe.shape[0] * dataframe.shape[1]) * 100 , 2)
+
+        number = str(num_nans)
+        perc = str(pct_nans)
+
+        # print(num_nans)
+        # print(pct_nans)
+
+
+        shape = (f"Number of columns = "+col_len+"\nNumber of row = "+rows_len+"\nNumber of Nans = "+number+"\nPercentage of Nans = "+perc+"%")
 
         return shape
 
