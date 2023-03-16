@@ -10,8 +10,8 @@ from examples.DataScience.datascience_node_base import DataScienceNode, DataScie
 class DataScienceGraphicalCalcMean(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 210
-        self.height = 100
+        self.width = 230
+        self.height = 120
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
