@@ -119,7 +119,9 @@ class DataScienceNodeDropColName(DataScienceNode):
 
         chosen_col_index = dataframe.columns.get_loc(chosen_col)
 
-        new_dataframe = dataframe.set_index(dataframe.columns[chosen_col_index])
+        sorted_dataframe = dataframe.sort_values(chosen_col)
+
+        new_dataframe = sorted_dataframe.set_index(dataframe.columns[chosen_col_index])
 
         self.content.combo_box.currentTextChanged.connect(self.onStatuesChange)
         print(new_dataframe)
