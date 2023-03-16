@@ -54,8 +54,8 @@ class DataScienceLoadContent(DataScienceContent):
 
             file_name = os.path.basename(file_path)
 
-            self.lbl.setText("Successfully Loaded\nThe CSV file:\n\n"+file_name)
-            self.lbl.move(35,20)
+            self.lbl.setText("Successfully Loaded\nThe file:\n\n"+file_name)
+            self.lbl.move(15,20)
             self.lbl.setStyleSheet("font: bold 13px;")
             self.lbl.adjustSize()
 

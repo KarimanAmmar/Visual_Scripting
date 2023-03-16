@@ -11,19 +11,17 @@ from nodeeditor.base_system_properties.utils_no_qt import dumpException
 class DataScienceGraphicalShow(DataScienceGraphicalNode):
     def nodeSizes(self):
         super().nodeSizes()
-        self.width = 600
-        self.height = 400
+
+        self.width = 700
+        self.height = 500
         self.edge_roundness = 6
         self.edge_padding = 0
         self.title_horizontal_padding = 8
         self.title_vertical_padding = 10
 
-
 class DataScienceShowContent(DataScienceContent):
 
     def createContentWidget(self):
-
-        df = pd.DataFrame({})
 
         self.table = QTableView(self)
         self.model = QStandardItemModel()
@@ -31,12 +29,10 @@ class DataScienceShowContent(DataScienceContent):
         # Create QTableView and set model
         self.table.setModel(self.model)
 
-        # Set table properties
-        self.model.setHorizontalHeaderLabels(df.columns)
-
         self.table.horizontalHeader().setVisible(True)
-
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+
+        self.table.verticalHeader().setVisible(True)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
 
         self.table.setEditTriggers(QTableView.NoEditTriggers)
@@ -48,6 +44,7 @@ class DataScienceShowContent(DataScienceContent):
 
         self.table.resize(600,375)
 
+
     def update_table(self, dataframe):
         # Read data from CSV file and create DataFrame
         df = pd.DataFrame(dataframe)
@@ -55,39 +52,45 @@ class DataScienceShowContent(DataScienceContent):
         # Clear current data in model
         self.model.clear()
 
-        # Set horizontal header labels
+        # set the index column and add the column headers to the model
+        self.model.setColumnCount(df.shape[1])
+        self.model.setRowCount(df.shape[0])
+
+        # Set table properties
         self.model.setHorizontalHeaderLabels(df.columns)
 
         # Add data to model
         for i in range(df.shape[0]):
-            row_items = []
             for j in range(df.shape[1]):
                 item = QStandardItem(str(df.iloc[i, j]))
-                row_items.append(item)
-            self.model.appendRow(row_items)
+                self.model.setItem(i, j, item)
 
-    def serialize(self):
-        res = super().serialize()
-        # res['value'] = self.edit.text()
-        return res
+        # # set the index column as row headers
+        # index_column = df.index.tolist()
+        # for row, item in enumerate(index_column):
+        #     self.model.setVerticalHeaderItem(row, QStandardItem(str(item)))
 
-    def deserialize(self, data, hashmap={}):
-        res = super().deserialize(data, hashmap)
-        try:
-            value = data['value']
-            # self.edit.setText(value)
-            return True & res
-        except Exception as e:
-            dumpException(e)
-        return res
+        # self.model.setVerticalHeaderLabels(df.index.astype(str))
 
+        # self.model.setVerticalHeaderLabels(list(map(str, df.index)))
+
+        # header_labels = [str(label) for label in df.index]
+        # self.model.setVerticalHeaderLabels(header_labels)
+
+        # self.model.setVerticalHeaderLabels(df.index.map(lambda label: str(label)).tolist())
+
+        # self.model.setVerticalHeaderLabels(df.index.values.astype(str).tolist())
+
+        # self.model.setVerticalHeaderLabels(df.index)
+
+        index_as_list = df.index.astype(str).tolist()
+        self.model.setVerticalHeaderLabels(index_as_list)
 
 @register_node(OP_NODE_SHOW_CSV)
 class DataScienceNodeShow(DataScienceNode):
     icon = "icons/show.png"
     op_code = OP_NODE_SHOW_CSV
     op_title = "Show Full Data Frame"
-
 
     def __init__(self, scene):
         super().__init__(scene, inputs=[3], outputs=[])
@@ -96,15 +99,6 @@ class DataScienceNodeShow(DataScienceNode):
     def getInnerClasses(self):
         self.content = DataScienceShowContent(self)
         self.grNode = DataScienceGraphicalShow(self)
-
-    def onInputChanged(self, socket=None):
-        finput_port = self.getInput(0)
-        if finput_port is not None:
-            # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
-            self.markReady()
-
-        else:
-            self.markInvalid()
 
     def evaluationImplementation(self):
 
@@ -135,4 +129,13 @@ class DataScienceNodeShow(DataScienceNode):
             self.markDescendantsReady()
 
             return
+
+    def onInputChanged(self, socket=None):
+        finput_port = self.getInput(0)
+        if finput_port is not None:
+            # self.nodeEvaluation()  # eval() ely fo2 3ala tol de, to be evaluated automaticlly when all inputs are connected!!
+            self.markReady()
+
+        else:
+            self.markInvalid()
 

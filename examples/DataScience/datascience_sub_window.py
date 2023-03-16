@@ -244,23 +244,45 @@ class DataScienceSubWindow(NodeEditorWidget):
 
         # for Showing and Printing nodes
         showing = QMenu(context_menu)
-        showing.setTitle('Show The Data Frame')
+        showing.setTitle('Show The Data Frame And Output')
         showing.setIcon(QIcon("icons/show.png"))
         context_menu.addMenu(showing)
-        for key in keys[1:4]:
+        for key in keys[1:5]:
             showing.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
+
+        stats = QMenu(context_menu)
+        stats.setTitle('Statistics Of The Data Frame')
+        stats.setIcon(QIcon("icons/stat.png"))
+        context_menu.addMenu(stats)
+        for key in keys[5:9]:
+            stats.addAction(self.node_actions[key])
+        context_menu.addSeparator()
+
 
         # for Operations nodes
         operations = QMenu(context_menu)
         operations.setTitle('Operations On The Data Frame')
         operations.setIcon(QIcon("icons/operations.png"))
         context_menu.addMenu(operations)
-        for key in keys[4:20]:
+
+        for key in keys[10:50]:
             operations.addAction(self.node_actions[key])
 
         context_menu.addSeparator()
+
+        visualization = QMenu(context_menu)
+        visualization.setTitle("Visualize The Data Frame")
+        visualization.setIcon(QIcon("icons/visualization.png"))
+        context_menu.addMenu(visualization)
+
+        for key in keys[59:60]:
+            context_menu.addAction(self.node_actions[key])
+
+        context_menu.addSeparator()
+
+
         self.runact = context_menu.addAction("RUN ALL CELLS")
 
         return context_menu

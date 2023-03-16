@@ -73,7 +73,7 @@ class DataScienceWindow(NodeEditorWindow):
 
         self.readSettings()
 
-        self.setWindowTitle("DataScience NodeEditor Example")
+        self.setWindowTitle("Data Science Node Editor")
 
     def closeEvent(self, event):
         self.mdiArea.closeAllSubWindows()
